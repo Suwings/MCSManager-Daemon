@@ -19,11 +19,12 @@ const { KillCommand } = require("../entity/commands/kill");
 
 // 部分实例操作路由器验证中间件
 routerApp.use((event, socket, data, next) => {
-  const instanceUUID = data.instanceUUID;
+
   if (event == "instance/new") return next();
   if (event == "instance/overview") return next();
   // 类 AOP
   if (event.startsWith("instance")) {
+    const instanceUUID = data.instanceUUID;
     if (!instanceService.exists(instanceUUID)) {
       return protocol.error(socket, event, {
         instanceUUID: instanceUUID,
