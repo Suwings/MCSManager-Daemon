@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2021-03-28 13:42:53
- * @LastEditTime: 2021-04-26 17:02:44
+ * @LastEditTime: 2021-04-26 17:06:29
  * @Description: Test 基础文件
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -20,9 +20,10 @@ const ip = "ws://127.0.0.1:24444";
 
 module.exports.io = (config) => {
   const socket = io.connect(ip, connectConfig);
-  socket.emit("auth", config.key);
+  socket.emit("auth", { uuid: "21432423432", data: config.key });
   socket.on("auth", (msg) => {
-    if (msg.status === 200 && msg.data === true) {
+    console.log("验证身份返回:", msg);
+    if (msg.status === 200 && msg.data === true && msg.uuid == "21432423432") {
       config.on(socket);
       config.req(socket);
       return;
