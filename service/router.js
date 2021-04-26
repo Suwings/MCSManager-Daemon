@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-03-28 08:47:26
+ * @LastEditTime: 2021-04-26 16:22:03
  * @Description: 路由导航器，用于分析 Socket.io 协议并封装转发到自定义路由
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -13,6 +13,7 @@ const { EventEmitter } = require("events");
 // eslint-disable-next-line no-unused-vars
 const { Socket } = require("socket.io");
 const { logger } = require("./log");
+const RouterContext = require("../entity/ctx");
 
 // 路由控制器类（单例类）
 class RouterApp extends EventEmitter {
@@ -23,17 +24,17 @@ class RouterApp extends EventEmitter {
 
   /**
    * @param {string} event
-   * @param {Socket} socket
-   * @param {string} data
+   * @param {RouterContext} ctx
+   * @param {string|Object} data
    */
-  emit(event, socket, data) {
-    super.emit(event, socket, data);
+  emit(event, ctx, data) {
+    super.emit(event, ctx, data);
     return this;
   }
 
   /**
    * @param {string} event event
-   * @param {(socket: Socket, data: string) => void} fn Function(socket: Socket, data: string)
+   * @param {(ctx: RouterContext, data: string) => void} fn
    * @return {RouterApp}
    */
   on(event, fn) {
@@ -43,7 +44,7 @@ class RouterApp extends EventEmitter {
 
   /**
    * 装载中间件
-   * @param {(event: string, socket: Socket, data: string, next: Function) => void} fn
+   * @param {(event: string, ctx: RouterContext, data: string, next: Function) => void} fn
    */
   use(fn) {
     this.middlewares.push(fn);
@@ -68,14 +69,19 @@ module.exports.routerApp = routerApp;
 module.exports.navigation = (socket) => {
   // 向 Socket 注册所有事件
   for (const event of routerApp.eventNames()) {
-    socket.on(event, (data) => {
-      routerApp.emit(event, socket, data);
+    socket.on(event, (protocol) => {
+      if (!protocol) return logger.info(`会话 ${socket.id} 请求数据协议格式不正确`);
+      const ctx = new RouterContext(protocol.uuid, socket);
+      routerApp.emit(event, ctx, protocol.data);
     });
   }
   // 向 Socket 注册所有中间件
   for (const fn of routerApp.getMiddlewares()) {
     socket.use((packet, next) => {
-      fn(packet[0], socket, packet[1], next);
+      const protocol = packet[1];
+      if (!protocol) return logger.info(`会话 ${socket.id} 请求数据协议格式不正确`);
+      const ctx = new RouterContext(protocol.uuid, socket);
+      fn(packet[0], ctx, protocol.data, next);
     });
   }
 };
