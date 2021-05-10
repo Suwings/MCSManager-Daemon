@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-10 20:45:19
+ * @LastEditTime: 2021-05-10 21:03:19
  * @Description: Route navigator, used to analyze the Socket.io protocol and encapsulate and forward to a custom route
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -38,7 +38,7 @@ class RouterApp extends EventEmitter {
    * @return {RouterApp}
    */
   on(event, fn) {
-    logger.info(`Register: ${event} event`);
+    // logger.info(`Register event: ${event} `);
     return super.on(event, fn);
   }
 
@@ -93,7 +93,7 @@ function importController() {
   const jsList = fs.readdirSync(routerPath);
   for (var name of jsList) {
     name = name.split(".")[0];
-    logger.info("route file: " + path.join(routerPath, name) + ".js");
+    logger.info(" + Route file: " + path.join(routerPath, name) + ".js");
     require(path.join(routerPath, name));
   }
   logger.info(`Complete. Total routing controller ${routerApp.eventNames().length}, middleware ${routerApp.middlewares.length}.`);

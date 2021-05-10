@@ -51,7 +51,6 @@ routerApp.on("instance/overview", (ctx) => {
   protocol.msg(ctx, "instance/overview", overview);
 });
 
-
 // 查看单个实例的详细情况
 routerApp.on("instance/detail", (ctx, data) => {
   try {
@@ -67,7 +66,6 @@ routerApp.on("instance/detail", (ctx, data) => {
     protocol.error(ctx, "instance/detail", { err: err.message });
   }
 });
-
 
 // 新建应用实例
 routerApp.on("instance/new", (ctx, data) => {
