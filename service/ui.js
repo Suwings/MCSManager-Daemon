@@ -1,8 +1,8 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2021-03-26 18:41:40
- * @LastEditTime: 2021-03-28 11:59:38
- * @Description: 终端交互逻辑，由于逻辑简单且均无需认证与检查，所有UI业务代码将全部在一个文件。
+ * @LastEditTime: 2021-05-10 20:47:15
+ * @Description: Terminal interaction logic. Since the logic is simple and does not require authentication and inspection, all UI business codes will be in one file.
  * @Projcet: MCSManager Daemon
  * @License: MIT
  */
@@ -13,18 +13,18 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-console.log("[User Interface] 程序拥有简易的终端交互功能，键入 help 得以查看更多信息.");
+console.log("[User Interface] program has a simple terminal interaction function, type help to see more information.");
 
 function stdin() {
   rl.question("> ", (answer) => {
     try {
       const cmds = answer.split(" ");
-      logger.info(`[终端] ${answer}`);
+      logger.info(`[Terminal] ${answer}`);
       const result = command(...cmds);
       if (result) console.log(result);
-      else console.log(`命令 ${answer} 并不存在，键入 help 得以获取帮助.`);
+      else console.log(`Command ${answer} does not exist, type help to get help.`);
     } catch (err) {
-      logger.error("[终端]", err);
+      logger.error("[Terminal]", err);
     } finally {
       // next
       stdin();
@@ -42,10 +42,10 @@ const { StartCommand } = require("../entity/commands/start");
 const { StopCommand } = require("../entity/commands/stop");
 const { KillCommand } = require("../entity/commands/kill");
 const { SendCommand } = require("../entity/commands/cmd");
-// const { logger } = require('./log');
+// const {logger} = require('./log');
 
 /**
- * 传入相关UI命令，输出命令结果
+ * Pass in relevant UI commands and output command results
  * @param {String} cmd
  * @return {String}
  */
@@ -67,17 +67,17 @@ function command(cmd, p1, p2, p3) {
       instanceService.getInstance(p2).exec(new SendCommand(p3));
       return "Done.";
     }
-    return "参数错误";
+    return "Parameter error";
   }
 
   if (cmd === "instances") {
     const objs = instanceService.getAllInstance();
-    let result = "实例名称 | 实例 UUID | 状态码\n";
+    let result = "instance name | instance UUID | status code\n";
     for (const id in objs) {
       const instance = objs[id];
       result += `${instance.config.nickname} ${instance.instanceUuid} ${instance.status()}\n`;
     }
-    result += "\n状态解释:\n 忙碌=-1;停止=0;停止中=1;开始中=2;正在运行=3;\n";
+    result += "\nStatus Explanation:\n Busy=-1;Stop=0;Stopping=1;Starting=2;Running=3;\n";
     return result;
   }
 
@@ -85,12 +85,12 @@ function command(cmd, p1, p2, p3) {
     const sockets = protocol.socketObjects();
     let result = "";
     let count = 0;
-    result += " IP 地址      |      会话标识符\n";
+    result += "IP address | session identifier\n";
     for (const id in sockets) {
       count++;
-      result += `${sockets[id].handshake.address}  ${id}\n`;
+      result += `${sockets[id].handshake.address} ${id}\n`;
     }
-    result += `总计 ${count} 在线.\n`;
+    result += `Total ${count} online.\n`;
     return result;
   }
 
@@ -100,29 +100,29 @@ function command(cmd, p1, p2, p3) {
 
   if (cmd == "exit") {
     try {
-      logger.info("正在准备关闭守护进程...");
+      logger.info("Preparing to shut down the daemon...");
       config.save();
       instanceService.exit();
-      logger.info("数据保存完毕，感谢使用，再见！");
+      logger.info("Data saved, thanks for using, goodbye!");
       logger.info("The data is saved, thanks for using, goodbye!");
       logger.info("process.exit(0);");
       process.exit(0);
     } catch (err) {
-      logger.error("结束程序失败，请检查文件权限后重试几次，依然无法关闭请使用 Ctrl+C 关闭.", err);
+      logger.error("Failed to end the program. Please check the file permissions and try again. If you still can't close it, please use Ctrl+C to close.", err);
     }
   }
 
   if (cmd == "help") {
-    console.log("----------- 帮助文档 -----------");
-    console.log(" instances     查看所有实例");
-    console.log(" sockets       查看所有链接者");
-    console.log(" key           查看密匙");
-    console.log(" exit          关闭本程序（推荐方法）");
-    console.log(" instance start <UUID>       启动指定实例");
-    console.log(" instance stop <UUID>        启动指定实例");
-    console.log(" instance kill <UUID>        启动指定实例");
-    console.log(" instance send <UUID> <CMD>  向实例发送命令");
-    console.log("----------- 帮助文档 -----------");
+    console.log("----------- Help document -----------");
+    console.log(" instances view all instances");
+    console.log(" Sockets view all linkers");
+    console.log(" key view key");
+    console.log(" exit to close this program (recommended method)");
+    console.log(" instance start <UUID> to start the specified instance");
+    console.log(" instance stop <UUID> to start the specified instance");
+    console.log(" instance kill <UUID> to start the specified instance");
+    console.log(" instance send <UUID> <CMD> to send a command to the instance");
+    console.log("----------- Help document -----------");
     return "\n";
   }
 }
