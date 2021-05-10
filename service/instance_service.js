@@ -37,42 +37,42 @@ class InstanceService extends EventEmitter {
    * @param {Instance} instance
    */
   addInstance(instance) {
-    if (this.instances[instance.instanceUUID]) {
-      throw new Error(`应用实例 ${instance.instanceUUID} 已经存在.`);
+    if (this.instances[instance.instanceUuid]) {
+      throw new Error(`应用实例 ${instance.instanceUuid} 已经存在.`);
     }
-    this.instances[instance.instanceUUID] = instance;
+    this.instances[instance.instanceUuid] = instance;
     // 动态监听新增的实例输出流，传递给自身事件流
     instance.on("data", (...arr) => {
-      this.emit("data", instance.instanceUUID, ...arr);
+      this.emit("data", instance.instanceUuid, ...arr);
     });
     instance.on("exit", (...arr) => {
-      this.emit("exit", instance.instanceUUID, ...arr);
+      this.emit("exit", instance.instanceUuid, ...arr);
     });
     instance.on("open", (...arr) => {
-      this.emit("open", instance.instanceUUID, ...arr);
+      this.emit("open", instance.instanceUuid, ...arr);
     });
   }
 
   /**
-   * @param {string} instanceUUID
+   * @param {string} instanceUuid
    */
-  removeInstance(instanceUUID) {
-    const instance = this.getInstance(instanceUUID);
+  removeInstance(instanceUuid) {
+    const instance = this.getInstance(instanceUuid);
     if (instance) instance.destroy();
-    delete this.instances[instanceUUID];
+    delete this.instances[instanceUuid];
     return true;
   }
 
   /**
-   * @param {string} instanceUUID
+   * @param {string} instanceUuid
    * @return {Instance}
    */
-  getInstance(instanceUUID) {
-    return this.instances[instanceUUID];
+  getInstance(instanceUuid) {
+    return this.instances[instanceUuid];
   }
 
-  exists(instanceUUID) {
-    return this.instances[instanceUUID] ? true : false;
+  exists(instanceUuid) {
+    return this.instances[instanceUuid] ? true : false;
   }
 
   /**
@@ -105,11 +105,11 @@ class InstanceService extends EventEmitter {
   exit() {
     this.forEachInstances((instance) => {
       if (instance.status() != Instance.STATUS_STOP) {
-        logger.info(`实例 ${instance.config.nickname} (${instance.instanceUUID}) 正在运行或忙碌，正在强制结束.`);
+        logger.info(`实例 ${instance.config.nickname} (${instance.instanceUuid}) 正在运行或忙碌，正在强制结束.`);
         instance.execCommand(new KillCommand());
       }
       instance.config.save();
-      logger.info(`实例 ${instance.config.nickname} (${instance.instanceUUID}) 数据保存成功.`);
+      logger.info(`实例 ${instance.config.nickname} (${instance.instanceUuid}) 数据保存成功.`);
     });
   }
 }

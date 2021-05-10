@@ -54,8 +54,8 @@ module.exports.StartCommand = class extends InstanceCommand {
       const commnadParameters = commandList.slice(1);
 
       logger.info("----------------");
-      logger.info(`Object ${this.Source} sends a command to open ${instance.instanceUUID} instance.`);
-      logger.info(`Starting instance: [${instance.instanceUUID}]`);
+      logger.info(`Object ${this.Source} sends a command to open ${instance.instanceUuid} instance.`);
+      logger.info(`Starting instance: [${instance.instanceUuid}]`);
       logger.info(`Command: ${commandExeFile} ${commnadParameters.join(" ")}`);
       logger.info(`Directory: ${instance.config.cwd}`);
       logger.info("----------------");

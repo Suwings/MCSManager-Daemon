@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2021-03-24 19:51:50
- * @LastEditTime: 2021-03-25 09:19:57
+ * @LastEditTime: 2021-05-10 19:24:43
  * @Description:
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -27,9 +27,10 @@ module.exports.SendCommand = class extends InstanceCommand {
    * @return {void}
    */
   exec(instance) {
-    if (!instance.process || instance.status() != Instance.STATUS_RUNNING) {
-      throw new Error("This instance status is NOT STATUS_RUN.");
-    }
+    // Note: 关服命令需要发送命令，但关服命令会设置状态为关闭中。
+    // if (!instance.process || instance.status() != Instance.STATUS_RUNNING) {
+    //   throw new Error("This instance status is NOT STATUS_RUN.");
+    // }
     instance.process.stdin.write(iconv.encode(this.cmd, instance.config.oe));
     instance.process.stdin.write("\n");
     return this;

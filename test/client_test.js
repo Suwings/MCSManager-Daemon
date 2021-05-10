@@ -39,7 +39,7 @@
 //     socket.on("instance/new", (msg) => {
 //       // console.log(">>>: ", msg);
 //       if (msg.status === 200) {
-//         preDelServerUUID = msg.data.instanceUUID;
+//         preDelServerUUID = msg.data.instanceUuid;
 //         socket.close();
 //         done();
 //       }
@@ -57,14 +57,14 @@
 //     const socket = io.connect(ip, connectConfig);
 //     socket.on("instance/opened", (msg) => {
 //       console.log(">>>: ", msg);
-//       if (msg.data.instanceUUID === testServerID) {
+//       if (msg.data.instanceUuid === testServerID) {
 //         done();
 //         socket.close();
 //       }
 //     });
 //     socket.emit("auth", "test_key");
 //     socket.emit("instance/open", {
-//       instanceUUID: testServerID
+//       instanceUuid: testServerID
 //     });
 //   });
 
@@ -85,7 +85,7 @@
 //     });
 //     socket.emit("auth", "test_key");
 //     socket.emit("instance/command", {
-//       instanceUUID: testServerID,
+//       instanceUuid: testServerID,
 //       command: "echo Test你好123"
 //     });
 //   });
@@ -101,7 +101,7 @@
 //     });
 //     socket.emit("auth", "test_key");
 //     socket.emit("instance/stop", {
-//       instanceUUID: testServerID
+//       instanceUuid: testServerID
 //     });
 //   });
 
@@ -120,7 +120,7 @@
 //     });
 //     socket.emit("auth", "test_key");
 //     socket.emit("instance/overview", {
-//       instanceUUID: testServerID
+//       instanceUuid: testServerID
 //     });
 //   });
 
@@ -147,10 +147,10 @@
 //     });
 //     socket.emit("auth", "test_key");
 //     socket.emit("instance/delete", {
-//       instanceUUID: preDelServerUUID
+//       instanceUuid: preDelServerUUID
 //     });
 //     socket.emit("instance/overview", {
-//       instanceUUID: preDelServerUUID
+//       instanceUuid: preDelServerUUID
 //     });
 //   });
 
@@ -176,27 +176,27 @@
 //     socket.emit("auth", "test_kedsdy1");
 //     socket.emit("instance/overview", {
 //       // 无权限状态查看所有远程程序
-//       instanceUUID: testServerID
+//       instanceUuid: testServerID
 //     });
 //     socket.emit("instance/new", {
 //       // 无权限状态创建远程程序
-//       instanceUUID: testServerID
+//       instanceUuid: testServerID
 //     });
 //     socket.emit("instance/open", {
 //       // 无权限状态开启远程程序
-//       instanceUUID: testServerID
+//       instanceUuid: testServerID
 //     });
 //     socket.emit("instance/stop", {
 //       // 无权限状态停止远程程序
-//       instanceUUID: testServerID
+//       instanceUuid: testServerID
 //     });
 //     socket.emit("instance/delete", {
 //       // 无权限状态删除远程程序
-//       instanceUUID: testServerID
+//       instanceUuid: testServerID
 //     });
 //     socket.emit("instance/command", {
 //       // 无权限状态发送远程程序命令
-//       instanceUUID: testServerID,
+//       instanceUuid: testServerID,
 //       command: "echo Test你好123"
 //     });
 //   });
@@ -218,16 +218,16 @@
 //     });
 //     socket.emit("auth", "test_key");
 //     socket.emit("instance/open", {
-//       instanceUUID: "splofjasoih"
+//       instanceUuid: "splofjasoih"
 //     });
 //     socket.emit("instance/stop", {
-//       instanceUUID: "splofjasoih"
+//       instanceUuid: "splofjasoih"
 //     });
 //     socket.emit("instance/delete", {
-//       instanceUUID: "splofjasoih"
+//       instanceUuid: "splofjasoih"
 //     });
 //     socket.emit("instance/command", {
-//       instanceUUID: "splofjasoih",
+//       instanceUuid: "splofjasoih",
 //       command: "echo Test你好123"
 //     });
 //   });

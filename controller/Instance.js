@@ -23,11 +23,11 @@ routerApp.use((event, ctx, data, next) => {
   if (event == "instance/overview") return next();
   // 类 AOP
   if (event.startsWith("instance")) {
-    const instanceUUID = data.instanceUUID;
-    if (!instanceService.exists(instanceUUID)) {
+    const instanceUuid = data.instanceUuid;
+    if (!instanceService.exists(instanceUuid)) {
       return protocol.error(ctx, event, {
-        instanceUUID: instanceUUID,
-        err: `应用实例 ${instanceUUID} 不存在，无法继续操作.`
+        instanceUuid: instanceUuid,
+        err: `应用实例 ${instanceUuid} 不存在，无法继续操作.`
       });
     }
   }
@@ -42,7 +42,7 @@ routerApp.on("instance/overview", (ctx) => {
     const instance = instanceService.getInstance(name);
     if (!instance) continue;
     overview.push({
-      instanceUUID: instance.instanceUUID,
+      instanceUuid: instance.instanceUuid,
       nickname: instance.config.nickname,
       createDatetime: instance.config.createDatetime,
       lastDatetime: instance.config.lastDatetime,
@@ -57,15 +57,13 @@ routerApp.on("instance/overview", (ctx) => {
 // 查看单个实例的详细情况
 routerApp.on("instance/detail", (ctx, data) => {
   try {
-    const instanceUUID = data.instanceUUID;
-    const instance = instanceService.getInstance(instanceUUID);
+    const instanceUuid = data.instanceUuid;
+    const instance = instanceService.getInstance(instanceUuid);
     protocol.msg(ctx, "instance/detail", {
-      instanceUUID: instance.instanceUUID,
-      nickname: instance.config.nickname,
-      createDatetime: instance.config.createDatetime,
-      lastDatetime: instance.config.lastDatetime,
+      instanceUuid: instance.instanceUuid,
       startCount: instance.startCount,
-      status: instance.status()
+      status: instance.status(),
+      config: instance.config
     });
   } catch (err) {
     protocol.error(ctx, "instance/detail", { err: err.message });
@@ -79,9 +77,9 @@ routerApp.on("instance/new", (ctx, data) => {
   const command = data.command;
   const cwd = data.cwd;
   const stopCommand = data.stopCommand || "^C";
-  const newUUID = uuid.v4().replace(/-/gim, "");
+  const newUuid = uuid.v4().replace(/-/gim, "");
   try {
-    const instance = new Instance(newUUID);
+    const instance = new Instance(newUuid);
     instance.parameters({
       nickname: nickname,
       startCommand: command,
@@ -91,69 +89,69 @@ routerApp.on("instance/new", (ctx, data) => {
       oe: "GBK"
     });
     instanceService.addInstance(instance);
-    protocol.msg(ctx, "instance/new", { instanceUUID: newUUID, nickname: nickname });
+    protocol.msg(ctx, "instance/new", { instanceUuid: newUuid, nickname: nickname });
   } catch (err) {
-    protocol.error(ctx, "instance/new", { instanceUUID: newUUID, err: err.message });
+    protocol.error(ctx, "instance/new", { instanceUuid: newUuid, err: err.message });
   }
 });
 
 // 开启实例
 routerApp.on("instance/open", (ctx, data) => {
-  const instanceUUID = data.instanceUUID;
-  const instance = instanceService.getInstance(instanceUUID);
+  const instanceUuid = data.instanceUuid;
+  const instance = instanceService.getInstance(instanceUuid);
   try {
     instance.exec(new StartCommand(ctx.socket.id));
-    protocol.msg(ctx, "instance/open", { instanceUUID });
+    protocol.msg(ctx, "instance/open", { instanceUuid });
   } catch (err) {
-    logger.error(`实例${instanceUUID}启动时错误: `, err);
-    protocol.error(ctx, "instance/open", { instanceUUID: instanceUUID, err: err.message });
+    logger.error(`实例${instanceUuid}启动时错误: `, err);
+    protocol.error(ctx, "instance/open", { instanceUuid: instanceUuid, err: err.message });
   }
 });
 
 // 关闭实例
 routerApp.on("instance/stop", (ctx, data) => {
-  const instanceUUID = data.instanceUUID;
-  const instance = instanceService.getInstance(instanceUUID);
+  const instanceUuid = data.instanceUuid;
+  const instance = instanceService.getInstance(instanceUuid);
   try {
     instance.exec(new StopCommand());
-    protocol.msg(ctx, "instance/stop", { instanceUUID });
+    protocol.msg(ctx, "instance/stop", { instanceUuid });
   } catch (err) {
-    protocol.error(ctx, "instance/stop", { instanceUUID: instanceUUID, err: err.message });
+    protocol.error(ctx, "instance/stop", { instanceUuid: instanceUuid, err: err.message });
   }
 });
 
 // 删除实例
 routerApp.on("instance/delete", (ctx, data) => {
-  const instanceUUID = data.instanceUUID;
+  const instanceUuid = data.instanceUuid;
   try {
-    instanceService.removeInstance(instanceUUID);
-    protocol.msg(ctx, "instance/delete", { instanceUUID });
+    instanceService.removeInstance(instanceUuid);
+    protocol.msg(ctx, "instance/delete", { instanceUuid });
   } catch (err) {
-    protocol.error(ctx, "instance/delete", { instanceUUID: instanceUUID, err: err.message });
+    protocol.error(ctx, "instance/delete", { instanceUuid: instanceUuid, err: err.message });
   }
 });
 
 // 向应用实例发送命令
 routerApp.on("instance/command", (ctx, data) => {
-  const instanceUUID = data.instanceUUID;
+  const instanceUuid = data.instanceUuid;
   const command = data.command || "";
-  const instance = instanceService.getInstance(instanceUUID);
+  const instance = instanceService.getInstance(instanceUuid);
   try {
     instance.exec(new SendCommand(command));
-    protocol.msg(ctx, "instance/command", { instanceUUID });
+    protocol.msg(ctx, "instance/command", { instanceUuid });
   } catch (err) {
-    protocol.error(ctx, "instance/command", { instanceUUID: instanceUUID, err: err.message });
+    protocol.error(ctx, "instance/command", { instanceUuid: instanceUuid, err: err.message });
   }
 });
 
 // 杀死应用实例方法
 routerApp.on("instance/kill", (ctx, data) => {
-  const instanceUUID = data.instanceUUID;
-  const instance = instanceService.getInstance(instanceUUID);
+  const instanceUuid = data.instanceUuid;
+  const instance = instanceService.getInstance(instanceUuid);
   try {
     instance.exec(new KillCommand());
-    protocol.msg(ctx, "instance/kill", { instanceUUID });
+    protocol.msg(ctx, "instance/kill", { instanceUuid });
   } catch (err) {
-    protocol.error(ctx, "instance/kill", { instanceUUID: instanceUUID, err: err.message });
+    protocol.error(ctx, "instance/kill", { instanceUuid: instanceUuid, err: err.message });
   }
 });

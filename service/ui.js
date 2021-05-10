@@ -75,7 +75,7 @@ function command(cmd, p1, p2, p3) {
     let result = "实例名称 | 实例 UUID | 状态码\n";
     for (const id in objs) {
       const instance = objs[id];
-      result += `${instance.config.nickname} ${instance.instanceUUID} ${instance.status()}\n`;
+      result += `${instance.config.nickname} ${instance.instanceUuid} ${instance.status()}\n`;
     }
     result += "\n状态解释:\n 忙碌=-1;停止=0;停止中=1;开始中=2;正在运行=3;\n";
     return result;

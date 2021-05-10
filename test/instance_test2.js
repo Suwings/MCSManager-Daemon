@@ -18,7 +18,7 @@ describe("第二代 Socket.io 业务逻辑测试", function () {
     test.io({
       key: key,
       req: (socket) => {
-        socket.emit("instance/open", { uuid: null, data: { instanceUUID: testServerID } });
+        socket.emit("instance/open", { uuid: null, data: { instanceUuid: testServerID } });
       },
       on: (socket) => {
         socket.on("instance/open", (msg) => {
@@ -32,12 +32,12 @@ describe("第二代 Socket.io 业务逻辑测试", function () {
   it("身份验证测试2", function () {
     const socket = io.connect(test.config.ip, test.config.connect);
     socket.emit("auth", { uuid: "1", data: key });
-    socket.emit("instance/stop", { uuid: "2", data: { instanceUUID: testServerID } });
+    socket.emit("instance/stop", { uuid: "2", data: { instanceUuid: testServerID } });
     socket.on("instance/stop", (msg) => {
       console.log("Return:", msg);
       // console.log(msg);
       Number(200).should.equal(msg.status);
-      // testServerID.should.equal(msg.data.instanceUUID);
+      // testServerID.should.equal(msg.data.instanceUuid);
       socket.close();
     });
   });
