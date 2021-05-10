@@ -53,6 +53,26 @@ routerApp.on("instance/overview", (ctx) => {
   protocol.msg(ctx, "instance/overview", overview);
 });
 
+
+// 查看单个实例的详细情况
+routerApp.on("instance/detail", (ctx, data) => {
+  try {
+    const instanceUUID = data.instanceUUID;
+    const instance = instanceService.getInstance(instanceUUID);
+    protocol.msg(ctx, "instance/detail", {
+      instanceUUID: instance.instanceUUID,
+      nickname: instance.config.nickname,
+      createDatetime: instance.config.createDatetime,
+      lastDatetime: instance.config.lastDatetime,
+      startCount: instance.startCount,
+      status: instance.status()
+    });
+  } catch (err) {
+    protocol.error(ctx, "instance/detail", { err: err.message });
+  }
+});
+
+
 // 新建应用实例
 routerApp.on("instance/new", (ctx, data) => {
   const nickname = data.nickname;
