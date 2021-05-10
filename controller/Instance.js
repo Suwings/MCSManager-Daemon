@@ -43,11 +43,9 @@ routerApp.on("instance/overview", (ctx) => {
     if (!instance) continue;
     overview.push({
       instanceUuid: instance.instanceUuid,
-      nickname: instance.config.nickname,
-      createDatetime: instance.config.createDatetime,
-      lastDatetime: instance.config.lastDatetime,
       startCount: instance.startCount,
-      status: instance.status()
+      status: instance.status(),
+      config: instance.config
     });
   }
   protocol.msg(ctx, "instance/overview", overview);
@@ -92,6 +90,18 @@ routerApp.on("instance/new", (ctx, data) => {
     protocol.msg(ctx, "instance/new", { instanceUuid: newUuid, nickname: nickname });
   } catch (err) {
     protocol.error(ctx, "instance/new", { instanceUuid: newUuid, err: err.message });
+  }
+});
+
+// 删除实例
+routerApp.on("instance/update", (ctx, data) => {
+  const instanceUuid = data.instanceUuid;
+  const config = data.config;
+  try {
+    instanceService.getInstance(instanceUuid).parameters(config);
+    protocol.msg(ctx, "instance/update", { instanceUuid });
+  } catch (err) {
+    protocol.error(ctx, "instance/update", { instanceUuid: instanceUuid, err: err.message });
   }
 });
 
