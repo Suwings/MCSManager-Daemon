@@ -27,7 +27,7 @@ routerApp.use((event, ctx, data, next) => {
     if (!instanceService.exists(instanceUuid)) {
       return protocol.error(ctx, event, {
         instanceUuid: instanceUuid,
-        err: `应用实例 ${instanceUuid} 不存在，无法继续操作.`
+        err: `The operation failed, the instance ${instanceUuid} does not exist.`
       });
     }
   }

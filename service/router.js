@@ -1,8 +1,8 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-04-26 16:22:03
- * @Description: 路由导航器，用于分析 Socket.io 协议并封装转发到自定义路由
+ * @LastEditTime: 2021-05-10 20:45:19
+ * @Description: Route navigator, used to analyze the Socket.io protocol and encapsulate and forward to a custom route
  * @Projcet: MCSManager Daemon
  * @License: MIT
  */
@@ -15,7 +15,7 @@ const { Socket } = require("socket.io");
 const { logger } = require("./log");
 const RouterContext = require("../entity/ctx");
 
-// 路由控制器类（单例类）
+// Routing controller class (singleton class)
 class RouterApp extends EventEmitter {
   constructor() {
     super();
@@ -38,12 +38,12 @@ class RouterApp extends EventEmitter {
    * @return {RouterApp}
    */
   on(event, fn) {
-    logger.info(`  注册: ${event} 事件`);
+    logger.info(`Register: ${event} event`);
     return super.on(event, fn);
   }
 
   /**
-   * 装载中间件
+   * Load middleware
    * @param {(event: string, ctx: RouterContext, data: string, next: Function) => void} fn
    */
   use(fn) {
@@ -58,44 +58,44 @@ class RouterApp extends EventEmitter {
   }
 }
 
-// 路由控制器单例类
+// routing controller singleton class
 const routerApp = new RouterApp();
 module.exports.routerApp = routerApp;
 
 /**
- * 基于 Socket.io 进行路由分散与二次转发
+ * Based on Socket.io for routing decentralization and secondary forwarding
  * @param {Socket} socket
  */
 module.exports.navigation = (socket) => {
-  // 向 Socket 注册所有事件
+  // Register all events with Socket
   for (const event of routerApp.eventNames()) {
     socket.on(event, (protocol) => {
-      if (!protocol) return logger.info(`会话 ${socket.id} 请求数据协议格式不正确`);
+      if (!protocol) return logger.info(`session $(socket.id) request data protocol format is incorrect`);
       const ctx = new RouterContext(protocol.uuid, socket);
       routerApp.emit(event, ctx, protocol.data);
     });
   }
-  // 向 Socket 注册所有中间件
+  // Register all middleware with Socket
   for (const fn of routerApp.getMiddlewares()) {
     socket.use((packet, next) => {
       const protocol = packet[1];
-      if (!protocol) return logger.info(`会话 ${socket.id} 请求数据协议格式不正确`);
+      if (!protocol) return logger.info(`session $(socket.id) request data protocol format is incorrect`);
       const ctx = new RouterContext(protocol.uuid, socket);
       fn(packet[0], ctx, protocol.data, next);
     });
   }
 };
 
-// 导入所有路由层类
+// Import all routing layer classes
 function importController() {
-  logger.info("正在装载路由控制器与中间件...");
+  logger.info("Loading routing controller and middleware...");
   const routerPath = path.normalize(path.join(__dirname, "../controller/"));
   const jsList = fs.readdirSync(routerPath);
   for (var name of jsList) {
     name = name.split(".")[0];
-    logger.info("路由文件: " + path.join(routerPath, name) + ".js");
+    logger.info("route file: " + path.join(routerPath, name) + ".js");
     require(path.join(routerPath, name));
   }
-  logger.info(`装载完毕，总路由控制器${routerApp.eventNames().length}个，中间件${routerApp.middlewares.length}个.`);
+  logger.info(`Complete. Total routing controller ${routerApp.eventNames().length}, middleware ${routerApp.middlewares.length}.`);
 }
 importController();
