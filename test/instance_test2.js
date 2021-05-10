@@ -22,7 +22,7 @@ describe("第二代 Socket.io 业务逻辑测试", function () {
       },
       on: (socket) => {
         socket.on("instance/open", (msg) => {
-          console.log("Return:", msg)
+          console.log("Return:", msg);
           Number(200).should.equal(msg.status);
         });
       }
@@ -34,7 +34,7 @@ describe("第二代 Socket.io 业务逻辑测试", function () {
     socket.emit("auth", { uuid: "1", data: key });
     socket.emit("instance/stop", { uuid: "2", data: { instanceUUID: testServerID } });
     socket.on("instance/stop", (msg) => {
-      console.log("Return:", msg)
+      console.log("Return:", msg);
       // console.log(msg);
       Number(200).should.equal(msg.status);
       // testServerID.should.equal(msg.data.instanceUUID);

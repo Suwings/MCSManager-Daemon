@@ -11,7 +11,6 @@
 const { Socket } = require("socket.io");
 
 module.exports = class RouterContext {
-
   /**
    * @param {String} uuid
    * @param {Socket} socket
@@ -20,5 +19,4 @@ module.exports = class RouterContext {
     this.uuid = uuid;
     this.socket = socket;
   }
-
-}
+};
