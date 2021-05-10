@@ -1,8 +1,8 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-03-28 12:46:45
- * @Description: 实例服务
+ * @LastEditTime: 2021-05-10 20:48:39
+ * @Description: instance service
  * @Projcet: MCSManager Daemon
  * @License: MIT
  */
@@ -21,7 +21,7 @@ class InstanceService extends EventEmitter {
   }
 
   /**
-   * 装载所有实例应用
+   * Load all example applications
    * @return {void}
    */
   loadInstances(dir) {
@@ -38,10 +38,10 @@ class InstanceService extends EventEmitter {
    */
   addInstance(instance) {
     if (this.instances[instance.instanceUuid]) {
-      throw new Error(`应用实例 ${instance.instanceUuid} 已经存在.`);
+      throw new Error(`The application instance ${instance.instanceUuid} already exists.`);
     }
     this.instances[instance.instanceUuid] = instance;
-    // 动态监听新增的实例输出流，传递给自身事件流
+    // Dynamically monitor the newly added instance output stream and pass it to its own event stream
     instance.on("data", (...arr) => {
       this.emit("data", instance.instanceUuid, ...arr);
     });
@@ -105,11 +105,11 @@ class InstanceService extends EventEmitter {
   exit() {
     this.forEachInstances((instance) => {
       if (instance.status() != Instance.STATUS_STOP) {
-        logger.info(`实例 ${instance.config.nickname} (${instance.instanceUuid}) 正在运行或忙碌，正在强制结束.`);
+        logger.info(`instance ${instance.config.nickname} (${instance.instanceUuid}) is running or busy, and is being forced to end.`);
         instance.execCommand(new KillCommand());
       }
       instance.config.save();
-      logger.info(`实例 ${instance.config.nickname} (${instance.instanceUuid}) 数据保存成功.`);
+      logger.info(`instance ${instance.config.nickname} (${instance.instanceUuid}) data saved successfully.`);
     });
   }
 }
