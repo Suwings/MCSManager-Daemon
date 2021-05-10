@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-10 20:51:02
+ * @LastEditTime: 2021-05-10 21:33:52
  * @Description: Daemon service startup file
  */
 
@@ -12,7 +12,19 @@ const { logger } = require("./service/log");
 const { Socket } = require("socket.io");
 const fs = require("fs-extra");
 
-logger.info(`Welcome to use Daemon service.`);
+console.log(`______  _______________________  ___                                         
+___   |/  /_  ____/_  ___/__   |/  /_____ _____________ _______ _____________
+__  /|_/ /_  /    _____ \\__  /|_/ /_  __  /_  __ \\  __  /_  __  /  _ \\_  ___/
+_  /  / / / /___  ____/ /_  /  / / / /_/ /_  / / / /_/ /_  /_/ //  __/  /    
+/_/  /_/  \\____/  /____/ /_/  /_/  \\__,_/ /_/ /_/\\__,_/ _\\__, / \\___//_/     
+________                                                /____/                                          
+___  __ \\_____ ____________ ________________ 
+__  / / /  __  /  _ \\_  __  __ \\  __ \\_  __ \\
+_  /_/ // /_/ //  __/  / / / / / /_/ /  / / /
+/_____/ \\__,_/ \\___//_/ /_/ /_/\\____//_/ /_/ Version 1.0
+`);
+
+logger.info(`Welcome to use MCSManager daemon.`);
 
 const io = (global.io = require("socket.io")(config.port, {
   serveClient: false,
