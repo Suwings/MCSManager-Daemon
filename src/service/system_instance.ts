@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-11 13:18:55
+ * @LastEditTime: 2021-05-11 15:45:41
  * @Description: instance service
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -17,7 +17,7 @@ import logger from "./log";
 
 import { v4 } from "uuid";
 
-class InstanceService extends EventEmitter {
+class InstanceSubsystem extends EventEmitter {
   public readonly instances = new Map<String, Instance>();
 
   constructor() {
@@ -82,7 +82,7 @@ class InstanceService extends EventEmitter {
   }
 
   forEachInstances(callback: (instance: Instance, id: string) => void) {
-    this.instances.forEach((v) => {});
+    this.instances.forEach((v) => { });
     for (const id in this.instances) {
       callback(this.instances.get(id), id);
     }
@@ -100,4 +100,4 @@ class InstanceService extends EventEmitter {
   }
 }
 
-export default new InstanceService();
+export default new InstanceSubsystem();

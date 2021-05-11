@@ -8,10 +8,10 @@
  */
 
 import * as protocol from "../service/protocol";
-import instanceService from "../service/instance_service";
+import InstanceSubsystem from "../service/system_instance";
 
 // 程序输出流日志广播
-instanceService.on("data", (instanceUuid: string, text: string) => {
+InstanceSubsystem.on("data", (instanceUuid: string, text: string) => {
   protocol.broadcast("instance/stdout", {
     instanceUuid: instanceUuid,
     text: text
@@ -19,14 +19,14 @@ instanceService.on("data", (instanceUuid: string, text: string) => {
 });
 
 // 实例退出事件
-instanceService.on("exit", (instanceUuid: string) => {
+InstanceSubsystem.on("exit", (instanceUuid: string) => {
   protocol.broadcast("instance/stopped", {
     instanceUuid: instanceUuid
   });
 });
 
 // 实例启动事件
-instanceService.on("open", (instanceUuid: string) => {
+InstanceSubsystem.on("open", (instanceUuid: string) => {
   protocol.broadcast("instance/opened", {
     instanceUuid: instanceUuid
   });

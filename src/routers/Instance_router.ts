@@ -7,7 +7,7 @@
 
 import * as protocol from "../service/protocol";
 import { routerApp } from "../service/router";
-import instanceService from "../service/instance_service";
+import InstanceSubsystem from "../service/system_instance";
 import Instance from "../entity/instance";
 import logger from "../service/log";
 
@@ -24,7 +24,7 @@ routerApp.use((event, ctx, data, next) => {
   // 类 AOP
   if (event.startsWith("instance")) {
     const instanceUuid = data.instanceUuid;
-    if (!instanceService.exists(instanceUuid)) {
+    if (!InstanceSubsystem.exists(instanceUuid)) {
       return protocol.error(ctx, event, {
         instanceUuid: instanceUuid,
         err: `The operation failed, the instance ${instanceUuid} does not exist.`
@@ -37,7 +37,7 @@ routerApp.use((event, ctx, data, next) => {
 // 获取本守护进程实例总览
 routerApp.on("instance/overview", (ctx) => {
   const overview: IInstanceDetail[] = [];
-  instanceService.getAllInstance().forEach((instance) => {
+  InstanceSubsystem.getAllInstance().forEach((instance) => {
     overview.push({
       instanceUuid: instance.instanceUuid,
       started: instance.startCount,
@@ -53,7 +53,7 @@ routerApp.on("instance/overview", (ctx) => {
 routerApp.on("instance/detail", (ctx, data) => {
   try {
     const instanceUuid = data.instanceUuid;
-    const instance = instanceService.getInstance(instanceUuid);
+    const instance = InstanceSubsystem.getInstance(instanceUuid);
     protocol.msg(ctx, "instance/detail", {
       instanceUuid: instance.instanceUuid,
       started: instance.startCount,
@@ -74,7 +74,7 @@ routerApp.on("instance/new", (ctx, data) => {
   const ie = data.ie;
   const oe = data.oe;
   try {
-    const newInstance = instanceService.createInstance({
+    const newInstance = InstanceSubsystem.createInstance({
       nickname: nickname,
       startCommand: command,
       stopCommand: stopCommand,
@@ -93,7 +93,7 @@ routerApp.on("instance/update", (ctx, data) => {
   const instanceUuid = data.instanceUuid;
   const config = data.config;
   try {
-    instanceService.getInstance(instanceUuid).parameters(config);
+    InstanceSubsystem.getInstance(instanceUuid).parameters(config);
     protocol.msg(ctx, "instance/update", { instanceUuid });
   } catch (err) {
     protocol.error(ctx, "instance/update", { instanceUuid: instanceUuid, err: err.message });
@@ -103,7 +103,7 @@ routerApp.on("instance/update", (ctx, data) => {
 // 开启实例
 routerApp.on("instance/open", (ctx, data) => {
   const instanceUuid = data.instanceUuid;
-  const instance = instanceService.getInstance(instanceUuid);
+  const instance = InstanceSubsystem.getInstance(instanceUuid);
   try {
     instance.exec(new StartCommand(ctx.socket.id));
     protocol.msg(ctx, "instance/open", { instanceUuid });
@@ -116,7 +116,7 @@ routerApp.on("instance/open", (ctx, data) => {
 // 关闭实例
 routerApp.on("instance/stop", (ctx, data) => {
   const instanceUuid = data.instanceUuid;
-  const instance = instanceService.getInstance(instanceUuid);
+  const instance = InstanceSubsystem.getInstance(instanceUuid);
   try {
     instance.exec(new StopCommand());
     protocol.msg(ctx, "instance/stop", { instanceUuid });
@@ -129,7 +129,7 @@ routerApp.on("instance/stop", (ctx, data) => {
 routerApp.on("instance/delete", (ctx, data) => {
   const instanceUuid = data.instanceUuid;
   try {
-    instanceService.removeInstance(instanceUuid);
+    InstanceSubsystem.removeInstance(instanceUuid);
     protocol.msg(ctx, "instance/delete", { instanceUuid });
   } catch (err) {
     protocol.error(ctx, "instance/delete", { instanceUuid: instanceUuid, err: err.message });
@@ -140,7 +140,7 @@ routerApp.on("instance/delete", (ctx, data) => {
 routerApp.on("instance/command", (ctx, data) => {
   const instanceUuid = data.instanceUuid;
   const command = data.command || "";
-  const instance = instanceService.getInstance(instanceUuid);
+  const instance = InstanceSubsystem.getInstance(instanceUuid);
   try {
     instance.exec(new SendCommand(command));
     protocol.msg(ctx, "instance/command", { instanceUuid });
@@ -152,7 +152,7 @@ routerApp.on("instance/command", (ctx, data) => {
 // 杀死应用实例方法
 routerApp.on("instance/kill", (ctx, data) => {
   const instanceUuid = data.instanceUuid;
-  const instance = instanceService.getInstance(instanceUuid);
+  const instance = InstanceSubsystem.getInstance(instanceUuid);
   try {
     instance.exec(new KillCommand());
     protocol.msg(ctx, "instance/kill", { instanceUuid });

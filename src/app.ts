@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-11 12:37:25
+ * @LastEditTime: 2021-05-11 15:46:43
  * @Description: Daemon service startup file
  */
 
@@ -26,7 +26,7 @@ logger.info(`Welcome to use MCSManager daemon.`);
 import config from "./entity/config";
 import * as router from "./service/router";
 import * as protocol from "./service/protocol";
-import instanceService from "./service/instance_service";
+import InstanceSubsystem from "./service/system_instance";
 
 // Websocket server
 const io = new Server(config.port, {
@@ -44,8 +44,8 @@ if (!fs.existsSync(config.instanceDirectory)) {
 // Load instance
 try {
   logger.info("Loading local instance file...");
-  instanceService.loadInstances(config.instanceDirectory);
-  logger.info(`All local instances are loaded, a total of ${instanceService.getInstancesSize()}.`);
+  InstanceSubsystem.loadInstances(config.instanceDirectory);
+  logger.info(`All local instances are loaded, a total of ${InstanceSubsystem.getInstancesSize()}.`);
 } catch (err) {
   logger.error("Failed to read the local instance file, this problem must be fixed to start:", err);
   process.exit(-1);
@@ -53,7 +53,7 @@ try {
 
 // Register link event
 io.on("connection", (socket: Socket) => {
-  logger.info(`Session ${socket.id}(${socket.handshake.address}) is linked`);
+  logger.info(`Session ${socket.id}(${socket.handshake.address}) is connected.`);
 
   // Join the global Socket object
   protocol.addGlobalSocket(socket);

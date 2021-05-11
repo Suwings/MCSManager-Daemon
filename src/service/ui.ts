@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2021-03-26 18:41:40
- * @LastEditTime: 2021-05-11 12:12:47
+ * @LastEditTime: 2021-05-11 15:46:54
  * @Description: Terminal interaction logic. Since the logic is simple and does not require authentication and inspection, all UI business codes will be in one file.
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -10,7 +10,7 @@
 import readline from "readline";
 
 import * as protocol from "./protocol";
-import instanceService from "./instance_service";
+import InstanceSubsystem from "./system_instance";
 import config from "../entity/config";
 import logger from "./log";
 import StartCommand from "../entity/commands/start";
@@ -52,26 +52,26 @@ stdin();
 function command(cmd: string, p1: string, p2: string, p3: string) {
   if (cmd === "instance") {
     if (p1 === "start") {
-      instanceService.getInstance(p2).exec(new StartCommand("Terminal"));
+      InstanceSubsystem.getInstance(p2).exec(new StartCommand("Terminal"));
       return "Done.";
     }
     if (p1 === "stop") {
-      instanceService.getInstance(p2).exec(new StopCommand());
+      InstanceSubsystem.getInstance(p2).exec(new StopCommand());
       return "Done.";
     }
     if (p1 === "kill") {
-      instanceService.getInstance(p2).exec(new KillCommand());
+      InstanceSubsystem.getInstance(p2).exec(new KillCommand());
       return "Done.";
     }
     if (p1 === "send") {
-      instanceService.getInstance(p2).exec(new SendCommand(p3));
+      InstanceSubsystem.getInstance(p2).exec(new SendCommand(p3));
       return "Done.";
     }
     return "Parameter error";
   }
 
   if (cmd === "instances") {
-    const objs = instanceService.getAllInstance();
+    const objs = InstanceSubsystem.getAllInstance();
     let result = "instance name | instance UUID | status code\n";
     for (const id in objs) {
       const instance = objs.get(id);
@@ -102,7 +102,7 @@ function command(cmd: string, p1: string, p2: string, p3: string) {
     try {
       logger.info("Preparing to shut down the daemon...");
       config.save();
-      instanceService.exit();
+      InstanceSubsystem.exit();
       logger.info("Data saved, thanks for using, goodbye!");
       logger.info("The data is saved, thanks for using, goodbye!");
       logger.info("process.exit(0);");
