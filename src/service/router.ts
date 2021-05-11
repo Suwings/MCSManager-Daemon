@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-11 12:34:37
+ * @LastEditTime: 2021-05-11 13:04:22
  * @Description: Route navigator, used to analyze the Socket.io protocol and encapsulate and forward to a custom route
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -78,9 +78,9 @@ export function navigation(socket: Socket) {
 };
 
 logger.info("Loading routing controller and middleware...");
-import "../routers/auth";
-import "../routers/Instance"
-import "../routers/instance_event"
+import "../routers/auth_router";
+import "../routers/Instance_router"
+import "../routers/instance_event_router"
 
 // Import all routing layer classes
 function importController() {

@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-11 11:48:39
+ * @LastEditTime: 2021-05-11 13:04:49
  * @Description: instance service
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -15,6 +15,7 @@ import EventEmitter from "events";
 import KillCommand from "../entity/commands/kill";
 import logger from "./log";
 
+import { v4 } from "uuid"
 
 class InstanceService extends EventEmitter {
 
@@ -25,10 +26,7 @@ class InstanceService extends EventEmitter {
 
   }
 
-  /**
-   * Load all example applications
-   * @return {void}
-   */
+
   loadInstances(dir: string) {
     const files = fs.readdirSync(dir);
     for (const fileName of files) {
@@ -38,9 +36,14 @@ class InstanceService extends EventEmitter {
     }
   }
 
-  /**
-   * @param {Instance} instance
-   */
+  createInstance(cfg: any) {
+    const newUuid = v4().replace(/-/gim, "");
+    const instance = new Instance(newUuid);
+    instance.parameters(cfg);
+    this.addInstance(instance);
+    return instance;
+  }
+
   addInstance(instance: Instance) {
     if (this.instances.has(instance.instanceUuid)) {
       throw new Error(`The application instance ${instance.instanceUuid} already exists.`);
@@ -58,9 +61,7 @@ class InstanceService extends EventEmitter {
     });
   }
 
-  /**
-   * @param {string} instanceUuid
-   */
+
   removeInstance(instanceUuid: string) {
     const instance = this.getInstance(instanceUuid);
     if (instance) instance.destroy();
@@ -68,10 +69,7 @@ class InstanceService extends EventEmitter {
     return true;
   }
 
-  /**
-   * @param {string} instanceUuid
-   * @return {Instance}
-   */
+
   getInstance(instanceUuid: string) {
     return this.instances.get(instanceUuid)
   }
@@ -80,27 +78,17 @@ class InstanceService extends EventEmitter {
     return this.instances.has(instanceUuid);
   }
 
-  /**
-   * @return {{string:Instance}}
-   */
+
   getAllInstance() {
     return this.instances;
   }
 
-  /**
-   * @return {Number}
-   */
-  getInstancesSize() {
-    let i = 0;
-    // eslint-disable-next-line no-unused-vars
-    for (const _key in this.instances) i++;
-    return i;
+
+  getInstancesSize(): number {
+    return this.instances.size;
   }
 
-  /**
-   * @param {(instance: Instance,id: string) => void} callback
-   * @return {*}
-   */
+
   forEachInstances(callback: (instance: Instance, id: string) => void) {
     this.instances.forEach((v) => {
 

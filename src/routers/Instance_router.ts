@@ -69,25 +69,24 @@ routerApp.on("instance/detail", (ctx, data) => {
 
 // 新建应用实例
 routerApp.on("instance/new", (ctx, data) => {
-  const nickname = String(data.nickname);
-  const command = String(data.command);
-  const cwd = String(data.cwd);
-  const stopCommand = String(data.stopCommand) || "^C";
-  const newUuid = v4().replace(/-/gim, "");
+  const nickname = (data.nickname);
+  const command = (data.command);
+  const cwd = (data.cwd);
+  const stopCommand = (data.stopCommand) || "^C";
+  const ie = (data.ie);
+  const oe = (data.oe);
   try {
-    const instance = new Instance(newUuid);
-    instance.parameters({
+    const newInstance = instanceService.createInstance({
       nickname: nickname,
       startCommand: command,
       stopCommand: stopCommand,
       cwd: cwd,
-      ie: "GBK",
-      oe: "GBK"
+      ie: ie,
+      oe: oe
     });
-    instanceService.addInstance(instance);
-    protocol.msg(ctx, "instance/new", { instanceUuid: newUuid, nickname: nickname });
+    protocol.msg(ctx, "instance/new", { instanceUuid: newInstance.instanceUuid, nickname: nickname });
   } catch (err) {
-    protocol.error(ctx, "instance/new", { instanceUuid: newUuid, err: err.message });
+    protocol.error(ctx, "instance/new", { instanceUuid: null, err: err.message });
   }
 });
 
