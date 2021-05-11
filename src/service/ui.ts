@@ -1,13 +1,15 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2021-03-26 18:41:40
- * @LastEditTime: 2021-05-10 20:47:15
+ * @LastEditTime: 2021-05-11 11:24:08
  * @Description: Terminal interaction logic. Since the logic is simple and does not require authentication and inspection, all UI business codes will be in one file.
  * @Projcet: MCSManager Daemon
  * @License: MIT
  */
 
-const readline = require("readline");
+
+import readline from "readline"
+
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
@@ -20,7 +22,7 @@ function stdin() {
     try {
       const cmds = answer.split(" ");
       logger.info(`[Terminal] ${answer}`);
-      const result = command(...cmds);
+      const result = command(cmds[1], cmds[2], cmds[3], cmds[4]);
       if (result) console.log(result);
       else console.log(`Command ${answer} does not exist, type help to get help.`);
     } catch (err) {
@@ -49,7 +51,7 @@ const { SendCommand } = require("../entity/commands/cmd");
  * @param {String} cmd
  * @return {String}
  */
-function command(cmd, p1, p2, p3) {
+function command(cmd: string, p1: string, p2: string, p3: string) {
   if (cmd === "instance") {
     if (p1 === "start") {
       instanceService.getInstance(p2).exec(new StartCommand("Terminal"));

@@ -1,13 +1,17 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-03-28 09:40:44
+ * @LastEditTime: 2021-05-11 11:09:16
  * @Description: 守护进程配置类
  */
 
-const uuid = require("uuid");
-const { DataStructure } = require("./structure");
-const path = require("path");
+// const uuid = require("uuid");
+// const { DataStructure } = require("./structure");
+// const path = require("path");
+
+import { v4 } from "uuid"
+import path from "path"
+import DataStructure from "./structure";
 // const fs = require("fs-extra");
 
 // 守护进程配置类
@@ -33,13 +37,11 @@ class Config extends DataStructure {
   }
 
   initKey() {
-    const key = uuid.v4().replace(/-/gim, "");
+    const key = v4().replace(/-/gim, "");
     return key;
   }
 }
 
 const config = new Config();
 
-module.exports = {
-  config
-};
+export default config;

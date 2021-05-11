@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2021-03-24 22:28:10
- * @LastEditTime: 2021-05-11 09:18:55
+ * @LastEditTime: 2021-05-11 11:09:23
  * @Description: Saving and reading of data configuration
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -12,7 +12,7 @@ import fs from "fs-extra"
 
 // 数据模型类
 // 用作数据与真实文件之间的抽象关系，数据模型保存的所有数据均会序列化成 JSON 格式保存在文件中
-class DataStructure {
+export default class DataStructure {
 
   private __filename__: string;
 
@@ -44,6 +44,4 @@ class DataStructure {
   }
 }
 
-module.exports = {
-  DataStructure
-};
+

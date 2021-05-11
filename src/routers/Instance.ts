@@ -4,17 +4,18 @@
  * @License: MIT
  * @Description: 应用实例相关控制器
  */
-const uuid = require("uuid");
-const { routerApp } = require("../service/router");
-const protocol = require("../service/protocol");
-const { instanceService } = require("../service/instance_service");
-const { Instance } = require("../entity/instance");
-const { logger } = require("../service/log");
+import uuid from "uuid"
+import * as protocol from "../service/protocol"
 
-const { StartCommand } = require("../entity/commands/start");
-const { StopCommand } = require("../entity/commands/stop");
-const { SendCommand } = require("../entity/commands/cmd");
-const { KillCommand } = require("../entity/commands/kill");
+import { routerApp } from "../service/router";
+import instanceService from "../service/instance_service";
+import Instance from "../entity/instance";
+import logger from "../service/log";
+
+import StartCommand from "../entity/commands/start";
+import StopCommand from "../entity/commands/stop";
+import SendCommand from "../entity/commands/cmd";
+import KillCommand from "../entity/commands/kill";
 // const io = require('socket.io')();
 
 // 部分实例操作路由器验证中间件

@@ -1,30 +1,35 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-10 20:48:39
+ * @LastEditTime: 2021-05-11 11:48:39
  * @Description: instance service
  * @Projcet: MCSManager Daemon
  * @License: MIT
  */
 // eslint-disable-next-line no-unused-vars
-const { Instance } = require("../entity/instance");
-const { EventEmitter } = require("events");
-const fs = require("fs-extra");
-const path = require("path");
-const { KillCommand } = require("../entity/commands/kill");
-const { logger } = require("./log");
+import fs from "fs-extra"
+import path from "path"
+
+import Instance from "../entity/instance";
+import EventEmitter from "events";
+import KillCommand from "../entity/commands/kill";
+import logger from "./log";
+
 
 class InstanceService extends EventEmitter {
+
+  public readonly instances = new Map<String, Instance>();
+
   constructor() {
     super();
-    this.instances = {};
+
   }
 
   /**
    * Load all example applications
    * @return {void}
    */
-  loadInstances(dir) {
+  loadInstances(dir: string) {
     const files = fs.readdirSync(dir);
     for (const fileName of files) {
       if (path.extname(fileName) !== ".json") continue;
@@ -36,11 +41,11 @@ class InstanceService extends EventEmitter {
   /**
    * @param {Instance} instance
    */
-  addInstance(instance) {
-    if (this.instances[instance.instanceUuid]) {
+  addInstance(instance: Instance) {
+    if (this.instances.has(instance.instanceUuid)) {
       throw new Error(`The application instance ${instance.instanceUuid} already exists.`);
     }
-    this.instances[instance.instanceUuid] = instance;
+    this.instances.set(instance.instanceUuid, instance);
     // Dynamically monitor the newly added instance output stream and pass it to its own event stream
     instance.on("data", (...arr) => {
       this.emit("data", instance.instanceUuid, ...arr);
@@ -56,10 +61,10 @@ class InstanceService extends EventEmitter {
   /**
    * @param {string} instanceUuid
    */
-  removeInstance(instanceUuid) {
+  removeInstance(instanceUuid: string) {
     const instance = this.getInstance(instanceUuid);
     if (instance) instance.destroy();
-    delete this.instances[instanceUuid];
+    this.instances.delete(instanceUuid)
     return true;
   }
 
@@ -67,12 +72,12 @@ class InstanceService extends EventEmitter {
    * @param {string} instanceUuid
    * @return {Instance}
    */
-  getInstance(instanceUuid) {
-    return this.instances[instanceUuid];
+  getInstance(instanceUuid: string) {
+    return this.instances.get(instanceUuid)
   }
 
-  exists(instanceUuid) {
-    return this.instances[instanceUuid] ? true : false;
+  exists(instanceUuid: string) {
+    return this.instances.has(instanceUuid);
   }
 
   /**
@@ -96,9 +101,12 @@ class InstanceService extends EventEmitter {
    * @param {(instance: Instance,id: string) => void} callback
    * @return {*}
    */
-  forEachInstances(callback) {
+  forEachInstances(callback: (instance: Instance, id: string) => void) {
+    this.instances.forEach((v) => {
+
+    })
     for (const id in this.instances) {
-      callback(this.instances[id], id);
+      callback(this.instances.get(id), id);
     }
   }
 
@@ -114,4 +122,4 @@ class InstanceService extends EventEmitter {
   }
 }
 
-module.exports.instanceService = new InstanceService();
+export default new InstanceService();

@@ -1,16 +1,21 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-10 21:33:52
+ * @LastEditTime: 2021-05-11 11:59:53
  * @Description: Daemon service startup file
  */
 
-const { config } = require("./entity/config");
-const { logger } = require("./service/log");
+import config from "./entity/config";
+import logger from "./service/log";
 
 // eslint-disable-next-line no-unused-vars
-const { Socket } = require("socket.io");
-const fs = require("fs-extra");
+// const { Socket } = require("socket.io");
+// const fs = require("fs-extra");
+
+
+// import * as socketIO from "socket.io";
+import fs from "fs-extra"
+import { Server, Socket } from "socket.io";
 
 console.log(`______  _______________________  ___                                         
 ___   |/  /_  ____/_  ___/__   |/  /_____ _____________ _______ _____________
@@ -26,19 +31,19 @@ _  /_/ // /_/ //  __/  / / / / / /_/ /  / / /
 
 logger.info(`Welcome to use MCSManager daemon.`);
 
-const io = (global.io = require("socket.io")(config.port, {
+const io = new Server(config.port, {
   serveClient: false,
   pingInterval: 10000,
   pingTimeout: 10000,
   cookie: false
-}));
+});
 
 // Initialize Session session variables
 // Use lightweight session function
-io.use((socket, next) => {
-  if (!socket.session) socket.session = {};
-  next();
-});
+// io.use((socket, next) => {
+//   if (!socket.session) socket.session = {};
+//   next();
+// });
 
 // Configuration file and data directory related operations
 if (!fs.existsSync(config.instanceDirectory)) {

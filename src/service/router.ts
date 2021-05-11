@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-11 09:46:20
+ * @LastEditTime: 2021-05-11 11:19:17
  * @Description: Route navigator, used to analyze the Socket.io protocol and encapsulate and forward to a custom route
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -45,7 +45,7 @@ class RouterApp extends EventEmitter {
   }
 
 
-  use(fn: (event: string, ctx: RouterContext, data: string, next: Function) => void) {
+  use(fn: (event: string, ctx: RouterContext, data: any, next: Function) => void) {
     this.middlewares.push(fn);
   }
 
@@ -58,14 +58,13 @@ class RouterApp extends EventEmitter {
 }
 
 // routing controller singleton class
-const routerApp = new RouterApp();
-module.exports.routerApp = routerApp;
+export const routerApp = new RouterApp();
 
 /**
  * Based on Socket.io for routing decentralization and secondary forwarding
  * @param {Socket} socket
  */
-module.exports.navigation = (socket: Socket) => {
+export function navigation(socket: Socket) {
   // Register all events with Socket
   for (const event of routerApp.eventNames()) {
     socket.on(event, (protocol) => {
@@ -85,16 +84,21 @@ module.exports.navigation = (socket: Socket) => {
   }
 };
 
+logger.info("Loading routing controller and middleware...");
+import "../routers/auth";
+// import "../routers/"
+
 // Import all routing layer classes
 function importController() {
-  logger.info("Loading routing controller and middleware...");
-  const routerPath = path.normalize(path.join(__dirname, "../routers/"));
-  const jsList = fs.readdirSync(routerPath);
-  for (var name of jsList) {
-    name = name.split(".")[0];
-    logger.info(" + Route file: " + path.join(routerPath, name) + ".js");
-    require(path.join(routerPath, name));
-  }
+
+  // const routerPath = path.normalize(path.join(__dirname, "../routers/"));
+  // const jsList = fs.readdirSync(routerPath);
+  // for (var name of jsList) {
+  //   name = name.split(".")[0];
+  //   logger.info(" + Route file: " + path.join(routerPath, name) + ".js");
+  //   require(path.join(routerPath, name));
+  // }
+
   logger.info(`Complete. Total routing controller ${routerApp.eventNames().length}, middleware ${routerApp.middlewares.length}.`);
 }
 importController();

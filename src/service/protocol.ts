@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-11 11:05:42
+ * @LastEditTime: 2021-05-11 11:16:25
  * @Description: 定义网络协议与常用发送/广播/解析功能，客户端也应当拥有此文件
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -36,7 +36,7 @@ export function msg(ctx: RouterContext, event: string, data: any) {
   ctx.socket.emit(event, packet);
 };
 
-export function error(ctx: RouterContext, event: string, err: string) {
+export function error(ctx: RouterContext, event: string, err: any) {
   const packet = new Packet(ctx.uuid, STATUS_ERR, event, err);
   logger.error(`会话 ${ctx.socket.id} 在 ${event} 中发送错误:\n`, err);
   ctx.socket.emit(event, packet);
