@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-11 12:23:39
+ * @LastEditTime: 2021-05-11 13:23:46
  * @Description: 定义网络协议与常用发送/广播/解析功能，客户端也应当拥有此文件
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -26,7 +26,7 @@ export interface IPacket {
 const globalSocket = new Map<String, Socket>();
 
 export class Packet implements IPacket {
-  constructor(public uuid: string = null, public status = 200, public event: string = null, public data: any = null) {}
+  constructor(public uuid: string = null, public status = 200, public event: string = null, public data: any = null) { }
 }
 
 export function msg(ctx: RouterContext, event: string, data: any) {

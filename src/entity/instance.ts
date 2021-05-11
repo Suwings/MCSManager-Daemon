@@ -86,10 +86,9 @@ export default class Instance extends EventEmitter {
     return this.instanceStatus;
   }
 
-  // 实例已启动后必须执行的函数
+  // 实例启动后必须执行的函数
   started(process: ChildProcess) {
     this.config.lastDatetime = this.fullTime();
-    // Process event.
     process.stdout.on("data", (text) => this.emit("data", iconv.decode(text, this.config.ie)));
     process.stderr.on("data", (text) => this.emit("data", iconv.decode(text, this.config.oe)));
     process.on("exit", (code) => this.stoped(code));
@@ -99,10 +98,7 @@ export default class Instance extends EventEmitter {
     this.config.save();
   }
 
-  /**
-   * 实例已关闭后必须执行的函数
-   * @param {Number} code
-   */
+  // 实例已关闭后必须执行的函数
   stoped(code = 0) {
     this.releaseResources();
     this.instanceStatus = Instance.STATUS_STOP;
@@ -122,6 +118,7 @@ export default class Instance extends EventEmitter {
     this.process = null;
   }
 
+  // 强制性删除本实例
   destroy() {
     try {
       if (this.process && this.process.pid) {

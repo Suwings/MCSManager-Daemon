@@ -5,8 +5,6 @@
  * @Description: 应用实例相关控制器
  */
 
-import { v4 } from "uuid";
-
 import * as protocol from "../service/protocol";
 import { routerApp } from "../service/router";
 import instanceService from "../service/instance_service";
