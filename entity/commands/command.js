@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2021-03-24 17:43:54
- * @LastEditTime: 2021-03-24 22:16:55
+ * @LastEditTime: 2021-05-11 08:37:54
  * @Description: InstanceCommand
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -16,7 +16,6 @@ module.exports.InstanceCommand = class {
    */
   constructor(info) {
     this.info = info;
-    this.lock = true;
   }
 
   /**
