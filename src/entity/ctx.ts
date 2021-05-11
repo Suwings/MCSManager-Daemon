@@ -1,20 +1,21 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2021-04-26 15:24:54
- * @LastEditTime: 2021-05-11 08:49:16
+ * @LastEditTime: 2021-05-11 09:12:04
  * @Description: 路由上下文
  * @Projcet: MCSManager Daemon
  * @License: MIT
  */
 
-// eslint-disable-next-line no-unused-vars
-const { Socket } = require("socket.io");
+import { Socket } from "socket.io";
 
-module.exports = class RouterContext {
-  /**
-   * @param {String} uuid
-   * @param {Socket} socket
-   */
+
+// import 
+
+export default class RouterContext {
+  public uuid: string
+  public socket: Socket
+
   constructor(uuid, socket) {
     this.uuid = uuid;
     this.socket = socket;
