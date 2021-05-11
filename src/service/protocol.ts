@@ -26,7 +26,7 @@ export interface IPacket {
 const globalSocket = new Map<String, Socket>();
 
 export class Packet implements IPacket {
-  constructor(public uuid: string = null, public status = 200, public event: string = null, public data: any = null) { }
+  constructor(public uuid: string = null, public status = 200, public event: string = null, public data: any = null) {}
 }
 
 export function msg(ctx: RouterContext, event: string, data: any) {
