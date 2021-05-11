@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-11 13:04:22
+ * @LastEditTime: 2021-05-11 13:14:12
  * @Description: Route navigator, used to analyze the Socket.io protocol and encapsulate and forward to a custom route
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -81,14 +81,4 @@ logger.info("Loading routing controller and middleware...");
 import "../routers/auth_router";
 import "../routers/Instance_router"
 import "../routers/instance_event_router"
-
-// Import all routing layer classes
-function importController() {
-
-  logger.info(`Complete. Total routing controller ${routerApp.eventNames().length}, middleware ${routerApp.middlewares.length}.`);
-}
-importController();
-
-interface ISession {
-  [_: string]: any
-}
+logger.info(`Complete. Total routing controller ${routerApp.eventNames().length}, middleware ${routerApp.middlewares.length}.`);
