@@ -1,21 +1,20 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-11 11:59:53
+ * @LastEditTime: 2021-05-11 12:08:04
  * @Description: Daemon service startup file
  */
 
 import config from "./entity/config";
 import logger from "./service/log";
 
-// eslint-disable-next-line no-unused-vars
-// const { Socket } = require("socket.io");
-// const fs = require("fs-extra");
-
-
-// import * as socketIO from "socket.io";
 import fs from "fs-extra"
 import { Server, Socket } from "socket.io";
+
+import * as router from "./service/router"
+import * as protocol from "./service/protocol"
+import instanceService from "./service/instance_service"
+
 
 console.log(`______  _______________________  ___                                         
 ___   |/  /_  ____/_  ___/__   |/  /_____ _____________ _______ _____________
@@ -38,21 +37,10 @@ const io = new Server(config.port, {
   cookie: false
 });
 
-// Initialize Session session variables
-// Use lightweight session function
-// io.use((socket, next) => {
-//   if (!socket.session) socket.session = {};
-//   next();
-// });
-
 // Configuration file and data directory related operations
 if (!fs.existsSync(config.instanceDirectory)) {
   fs.mkdirsSync(config.instanceDirectory);
 }
-
-const router = require("./service/router");
-const protocol = require("./service/protocol");
-const { instanceService } = require("./service/instance_service");
 
 // Load instance
 try {
@@ -102,7 +90,7 @@ logger.info("It is recommended to use the exit command to close the exit program
 logger.info("--------------------");
 console.log("");
 
-require("./service/ui");
+import "./service/ui"
 
 process.on("SIGINT", function () {
   console.log("\n\n\n\n");

@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2021-03-26 18:41:40
- * @LastEditTime: 2021-05-11 11:24:08
+ * @LastEditTime: 2021-05-11 12:12:47
  * @Description: Terminal interaction logic. Since the logic is simple and does not require authentication and inspection, all UI business codes will be in one file.
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -9,6 +9,17 @@
 
 
 import readline from "readline"
+
+
+import * as protocol from "./protocol";
+import instanceService from "./instance_service";
+import config from "../entity/config";
+import logger from "./log";
+import StartCommand from "../entity/commands/start";
+import StopCommand from "../entity/commands/stop";
+import KillCommand from "../entity/commands/kill";
+import SendCommand from "../entity/commands/cmd";
+
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -35,16 +46,6 @@ function stdin() {
 }
 
 stdin();
-
-const { instanceService } = require("./instance_service");
-const protocol = require("./protocol");
-const { config } = require("../entity/config");
-const { logger } = require("./log");
-const { StartCommand } = require("../entity/commands/start");
-const { StopCommand } = require("../entity/commands/stop");
-const { KillCommand } = require("../entity/commands/kill");
-const { SendCommand } = require("../entity/commands/cmd");
-// const {logger} = require('./log');
 
 /**
  * Pass in relevant UI commands and output command results
@@ -76,7 +77,7 @@ function command(cmd: string, p1: string, p2: string, p3: string) {
     const objs = instanceService.getAllInstance();
     let result = "instance name | instance UUID | status code\n";
     for (const id in objs) {
-      const instance = objs[id];
+      const instance = objs.get(id);
       result += `${instance.config.nickname} ${instance.instanceUuid} ${instance.status()}\n`;
     }
     result += "\nStatus Explanation:\n Busy=-1;Stop=0;Stopping=1;Starting=2;Running=3;\n";
@@ -90,7 +91,7 @@ function command(cmd: string, p1: string, p2: string, p3: string) {
     result += "IP address | session identifier\n";
     for (const id in sockets) {
       count++;
-      result += `${sockets[id].handshake.address} ${id}\n`;
+      result += `${sockets.get(id).handshake.address} ${id}\n`;
     }
     result += `Total ${count} online.\n`;
     return result;

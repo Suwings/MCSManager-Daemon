@@ -16,7 +16,6 @@ import StartCommand from "../entity/commands/start";
 import StopCommand from "../entity/commands/stop";
 import SendCommand from "../entity/commands/cmd";
 import KillCommand from "../entity/commands/kill";
-// const io = require('socket.io')();
 
 // 部分实例操作路由器验证中间件
 routerApp.use((event, ctx, data, next) => {

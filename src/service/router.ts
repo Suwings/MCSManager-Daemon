@@ -1,26 +1,17 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-11 11:19:17
+ * @LastEditTime: 2021-05-11 12:10:53
  * @Description: Route navigator, used to analyze the Socket.io protocol and encapsulate and forward to a custom route
  * @Projcet: MCSManager Daemon
  * @License: MIT
  */
 
-import fs from "fs-extra"
-import path from "path"
 import { EventEmitter } from "events"
 import { Socket } from "socket.io"
 import logger from "./log"
 import RouterContext from "../entity/ctx"
 
-// const fs = require("fs-extra");
-// const path = require("path");
-// const { EventEmitter } = require("events");
-// // eslint-disable-next-line no-unused-vars
-// const { Socket } = require("socket.io");
-// const { logger } = require("./log");
-// const RouterContext = require("../entity/ctx");
 
 // Routing controller class (singleton class)
 class RouterApp extends EventEmitter {
@@ -86,18 +77,11 @@ export function navigation(socket: Socket) {
 
 logger.info("Loading routing controller and middleware...");
 import "../routers/auth";
-// import "../routers/"
+import "../routers/Instance"
+import "../routers/instance_event"
 
 // Import all routing layer classes
 function importController() {
-
-  // const routerPath = path.normalize(path.join(__dirname, "../routers/"));
-  // const jsList = fs.readdirSync(routerPath);
-  // for (var name of jsList) {
-  //   name = name.split(".")[0];
-  //   logger.info(" + Route file: " + path.join(routerPath, name) + ".js");
-  //   require(path.join(routerPath, name));
-  // }
 
   logger.info(`Complete. Total routing controller ${routerApp.eventNames().length}, middleware ${routerApp.middlewares.length}.`);
 }

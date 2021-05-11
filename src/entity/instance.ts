@@ -10,11 +10,8 @@ import * as iconv from "iconv-lite"
 import InstanceCommand from "./commands/command"
 import * as path from "path"
 import { ChildProcess } from "child_process";
-
-const { DataStructure } = require("./structure");
-const globalConfig = require("./config");
-// const fs = require("fs-extra");
-
+import DataStructure from "./structure"
+import globalConfig from "./config"
 
 export default class Instance extends EventEmitter {
 

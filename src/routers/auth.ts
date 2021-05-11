@@ -7,11 +7,6 @@
  * @License: MIT
  */
 
-// const { routerApp } = require("../service/router");
-// const protocol = require("../service/protocol");
-// const { config } = require("../entity/config");
-// const { logger } = require("../service/log");
-
 import { routerApp } from "../service/router";
 import * as protocol from "../service/protocol";
 import config from "../entity/config";

@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2021-03-24 19:51:50
- * @LastEditTime: 2021-05-11 09:17:40
+ * @LastEditTime: 2021-05-11 12:09:31
  * @Description:
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -9,12 +9,10 @@
 
 // eslint-disable-next-line no-unused-vars
 import Instance from "../instance"
-const { logger } = require("../../service/log");
+import logger from "../../service/log";
 
 import InstanceCommand from "./command"
 import * as childProcess from "child_process"
-
-// const iconv = require("iconv-lite");
 
 class StartupError extends Error {
   constructor(msg: string) {

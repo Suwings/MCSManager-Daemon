@@ -1,18 +1,14 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-11 11:09:16
+ * @LastEditTime: 2021-05-11 12:08:12
  * @Description: 守护进程配置类
  */
 
-// const uuid = require("uuid");
-// const { DataStructure } = require("./structure");
-// const path = require("path");
 
 import { v4 } from "uuid"
 import path from "path"
 import DataStructure from "./structure";
-// const fs = require("fs-extra");
 
 // 守护进程配置类
 class Config extends DataStructure {
