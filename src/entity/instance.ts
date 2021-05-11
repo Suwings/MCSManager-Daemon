@@ -5,54 +5,45 @@
  * @Description: 应用实例和实例类实现
  */
 
-// const childProcess = require("child_process");
-const { EventEmitter } = require("events");
-const iconv = require("iconv-lite");
-// const { logger } = require("../service/log");
-// eslint-disable-next-line no-unused-vars
-const { InstanceCommand } = require("./commands/command");
+import { EventEmitter } from "events"
+import * as iconv from "iconv-lite"
+import InstanceCommand from "./commands/command"
+import * as path from "path"
+import { ChildProcess } from "child_process";
+
 const { DataStructure } = require("./structure");
 const globalConfig = require("./config");
-const path = require("path");
 // const fs = require("fs-extra");
 
-class InstanceCommandError extends Error {
-  constructor(msg) {
-    super(msg);
-  }
-}
 
-class InstanceConfig extends DataStructure {
-  constructor(path) {
-    super(path);
-    this.nickname = "";
-    this.startCommand = "";
-    this.stopCommand = "";
-    this.cwd = "";
-    this.ie = "utf-8";
-    this.oe = "utf-8";
-    this.createDatetime = new Date().toLocaleDateString();
-    this.lastDatetime = "--";
+export default class Instance extends EventEmitter {
 
-    // Instance type like: Minecraft,Webwhell...
-    this.type = Instance.TYPE_UNIVERSAL;
-    // Instance tag like: Cloud1 Group2...
-    this.tag = [];
-  }
+  // 实例类静态变量
+  public static readonly STATUS_BUSY = -1;
+  public static readonly STATUS_STOP = 0;
+  public static readonly STATUS_STOPPING = 1;
+  public static readonly STATUS_STARTING = 2;
+  public static readonly STATUS_RUNNING = 3;
 
-  parameters(cfg) {
-    this.nickname = cfg.nickname || this.nickname || "DefaultInstance_" + new Date().getTime();
-    this.startCommand = cfg.startCommand || this.startCommand || "";
-    this.stopCommand = cfg.stopCommand || this.stopCommand || "^C";
-    this.cwd = cfg.cwd || this.cwd || ".";
-    this.ie = cfg.ie || this.ie || "utf-8";
-    this.oe = cfg.oe || this.oe || "utf-8";
-    this.type = cfg.type || this.type || Instance.TYPE_UNIVERSA;
-    this.save();
-  }
-}
+  // 实例类型
+  public static readonly TYPE_UNIVERSAL = "TYPE_UNIVERSAL"; // 通用
+  public static readonly TYPE_MINECRAFT = "TYPE_MINECRAFT"; // Minecraft 游戏服务端
+  public static readonly TYPE_WEB_SHELL = "TYPE_WEB_SHELL"; // WebShell 程序
+  public static readonly TYPE_LOW_PERMISSION = "TYPE_LOW_PERMISSION"; // 低权限程序
 
-class Instance extends EventEmitter {
+
+  public instanceStatus: number
+  public instanceUuid: string
+
+  // Action lock
+  public lock: boolean
+
+  // Config init
+  public config: InstanceConfig
+
+  public process: ChildProcess
+  public startCount: number
+
   /**
    * @param {string} startCommand
    */
@@ -74,44 +65,36 @@ class Instance extends EventEmitter {
     this.startCount = 0;
   }
 
-  parameters(cfg) {
+  parameters(cfg: any) {
     this.config.parameters(cfg);
   }
 
-  setLock(bool) {
+  setLock(bool: boolean) {
     this.lock = bool;
   }
 
-  /**
-   * 对本实例执行对应的命令
-   * @param {InstanceCommand} command
-   * @return {void}
-   */
-  execCommand(command) {
+  // 对本实例执行对应的命令
+  execCommand(command: InstanceCommand) {
     if (this.lock) throw new InstanceCommandError(`This ${command.info} operation cannot be completed because the command executes a deadlock.`);
     if (this.status() == Instance.STATUS_BUSY) throw new InstanceCommandError(`The status of ${this.instanceUuid} instance is busy and cannot do anything.`);
     command.exec(this);
   }
 
-  /**
-   * 对本实例执行对应的命令 别名
-   * @param {InstanceCommand} command
-   * @return {void}
-   */
+
+  // 对本实例执行对应的命令 别名
   exec(command) {
     this.execCommand(command);
   }
 
-  status(v) {
+  // 设置实例状态或获取状态
+  status(v?: number) {
     if (v) this.instanceStatus = v;
     return this.instanceStatus;
   }
 
-  /**
-   * 实例已启动后必须执行的函数
-   * @param {NodeJS.Process} process
-   */
-  started(process) {
+
+  // 实例已启动后必须执行的函数
+  started(process: ChildProcess) {
     this.config.lastDatetime = this.fullTime();
     // Process event.
     process.stdout.on("data", (text) => this.emit("data", iconv.decode(text, this.config.ie)));
@@ -164,19 +147,42 @@ class Instance extends EventEmitter {
   }
 }
 
-// 实例类静态变量
-Instance.STATUS_BUSY = -1;
-Instance.STATUS_STOP = 0;
-Instance.STATUS_STOPPING = 1;
-Instance.STATUS_STARTING = 2;
-Instance.STATUS_RUNNING = 3;
 
-// 实例类型
-Instance.TYPE_UNIVERSAL = "TYPE_UNIVERSAL"; // 通用
-Instance.TYPE_MINECRAFT = "TYPE_MINECRAFT"; // Minecraft 游戏服务端
-Instance.TYPE_WEB_SHELL = "TYPE_WEB_SHELL"; // WebShell 程序
-Instance.TYPE_LOW_PERMISSION = "TYPE_LOW_PERMISSION"; // 低权限程序
+class InstanceConfig extends DataStructure {
+  constructor(path) {
+    super(path);
+    this.nickname = "";
+    this.startCommand = "";
+    this.stopCommand = "";
+    this.cwd = "";
+    this.ie = "utf-8";
+    this.oe = "utf-8";
+    this.createDatetime = new Date().toLocaleDateString();
+    this.lastDatetime = "--";
 
-module.exports = {
-  Instance
-};
+    // Instance type like: Minecraft,Webwhell...
+    this.type = Instance.TYPE_UNIVERSAL;
+    // Instance tag like: Cloud1 Group2...
+    this.tag = [];
+  }
+
+  parameters(cfg) {
+    this.nickname = cfg.nickname || this.nickname || "DefaultInstance_" + new Date().getTime();
+    this.startCommand = cfg.startCommand || this.startCommand || "";
+    this.stopCommand = cfg.stopCommand || this.stopCommand || "^C";
+    this.cwd = cfg.cwd || this.cwd || ".";
+    this.ie = cfg.ie || this.ie || "utf-8";
+    this.oe = cfg.oe || this.oe || "utf-8";
+    this.type = cfg.type || this.type || Instance.TYPE_UNIVERSAL;
+    this.save();
+  }
+}
+
+
+
+
+class InstanceCommandError extends Error {
+  constructor(msg) {
+    super(msg);
+  }
+}
