@@ -91,7 +91,7 @@ routerApp.on("instance/new", (ctx, data) => {
   }
 });
 
-// 删除实例
+// 更新实例数据
 routerApp.on("instance/update", (ctx, data) => {
   const instanceUuid = data.instanceUuid;
   const config = data.config;
