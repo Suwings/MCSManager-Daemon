@@ -7,15 +7,12 @@
  * @License: MIT
  */
 
-
-import Instance from "../instance"
-import { encode } from "iconv-lite"
-import InstanceCommand from "./command"
-
+import Instance from "../instance";
+import { encode } from "iconv-lite";
+import InstanceCommand from "./command";
 
 export default class SendCommand extends InstanceCommand {
-
-  public cmd: string
+  public cmd: string;
 
   constructor(cmd: string) {
     super("SendCommand");
@@ -31,4 +28,4 @@ export default class SendCommand extends InstanceCommand {
     instance.process.stdin.write("\n");
     return this;
   }
-};
+}

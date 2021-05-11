@@ -6,9 +6,7 @@
  * @License: MIT
  */
 
-
-
-import * as log4js from "log4js"
+import * as log4js from "log4js";
 const LOG_FILE_PATH = "logs/current.log";
 
 log4js.configure({
@@ -38,6 +36,5 @@ log4js.configure({
 });
 
 const logger = log4js.getLogger("default");
-
 
 export default logger;

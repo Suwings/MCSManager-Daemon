@@ -7,34 +7,30 @@
  * @License: MIT
  */
 
-import { EventEmitter } from "events"
-import { Socket } from "socket.io"
-import logger from "./log"
-import RouterContext from "../entity/ctx"
-import { IPacket } from "../service/protocol"
+import { EventEmitter } from "events";
+import { Socket } from "socket.io";
+import logger from "./log";
+import RouterContext from "../entity/ctx";
+import { IPacket } from "../service/protocol";
 
 // Routing controller class (singleton class)
 class RouterApp extends EventEmitter {
-
-  public readonly middlewares: Array<Function>
+  public readonly middlewares: Array<Function>;
 
   constructor() {
     super();
     this.middlewares = [];
   }
 
-
   emitRouter(event: string, ctx: RouterContext, data: any) {
     super.emit(event, ctx, data);
     return this;
   }
 
-
   on(event: string, fn: (ctx: RouterContext, data: any) => void) {
     logger.info(` Register event: ${event} `);
     return super.on(event, fn);
   }
-
 
   use(fn: (event: string, ctx: RouterContext, data: any, next: Function) => void) {
     this.middlewares.push(fn);
@@ -57,7 +53,7 @@ export const routerApp = new RouterApp();
  */
 export function navigation(socket: Socket) {
   // Full-life session variables (Between connection and disconnection)
-  const session: any = {}
+  const session: any = {};
   // Register all events with Socket
   for (const event of routerApp.eventNames()) {
     socket.on(event, (protocol: IPacket) => {
@@ -75,10 +71,10 @@ export function navigation(socket: Socket) {
       fn(packet[0], ctx, protocol.data, next);
     });
   }
-};
+}
 
 logger.info("Loading routing controller and middleware...");
 import "../routers/auth_router";
-import "../routers/Instance_router"
-import "../routers/instance_event_router"
+import "../routers/Instance_router";
+import "../routers/instance_event_router";
 logger.info(`Complete. Total routing controller ${routerApp.eventNames().length}, middleware ${routerApp.middlewares.length}.`);

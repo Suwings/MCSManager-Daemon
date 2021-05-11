@@ -5,16 +5,15 @@
  * @Description: 应用实例和实例类实现
  */
 
-import { EventEmitter } from "events"
-import * as iconv from "iconv-lite"
-import InstanceCommand from "./commands/command"
-import * as path from "path"
+import { EventEmitter } from "events";
+import * as iconv from "iconv-lite";
+import InstanceCommand from "./commands/command";
+import * as path from "path";
 import { ChildProcess } from "child_process";
-import DataStructure from "./structure"
-import globalConfig from "./config"
+import DataStructure from "./structure";
+import globalConfig from "./config";
 
 export default class Instance extends EventEmitter {
-
   // 实例类静态变量
   public static readonly STATUS_BUSY = -1;
   public static readonly STATUS_STOP = 0;
@@ -28,18 +27,17 @@ export default class Instance extends EventEmitter {
   public static readonly TYPE_WEB_SHELL = "TYPE_WEB_SHELL"; // WebShell 程序
   public static readonly TYPE_LOW_PERMISSION = "TYPE_LOW_PERMISSION"; // 低权限程序
 
-
-  public instanceStatus: number
-  public instanceUuid: string
+  public instanceStatus: number;
+  public instanceUuid: string;
 
   // Action lock
-  public lock: boolean
+  public lock: boolean;
 
   // Config init
-  public config: InstanceConfig
+  public config: InstanceConfig;
 
-  public process: ChildProcess
-  public startCount: number
+  public process: ChildProcess;
+  public startCount: number;
 
   /**
    * @param {string} startCommand
@@ -77,7 +75,6 @@ export default class Instance extends EventEmitter {
     command.exec(this);
   }
 
-
   // 对本实例执行对应的命令 别名
   exec(command: InstanceCommand) {
     this.execCommand(command);
@@ -88,7 +85,6 @@ export default class Instance extends EventEmitter {
     if (v) this.instanceStatus = v;
     return this.instanceStatus;
   }
-
 
   // 实例已启动后必须执行的函数
   started(process: ChildProcess) {
@@ -144,7 +140,6 @@ export default class Instance extends EventEmitter {
   }
 }
 
-
 class InstanceConfig extends DataStructure {
   constructor(path: string) {
     super(path);
@@ -174,9 +169,6 @@ class InstanceConfig extends DataStructure {
     this.save();
   }
 }
-
-
-
 
 class InstanceCommandError extends Error {
   constructor(msg: string) {

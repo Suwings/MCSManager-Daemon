@@ -17,18 +17,16 @@ _  /_/ // /_/ //  __/  / / / / / /_/ /  / / /
 /_____/ \\__,_/ \\___//_/ /_/ /_/\\____//_/ /_/ Version 1.0
 `);
 
-
-
-import fs from "fs-extra"
+import fs from "fs-extra";
 import { Server, Socket } from "socket.io";
 
 import logger from "./service/log";
 logger.info(`Welcome to use MCSManager daemon.`);
 
 import config from "./entity/config";
-import * as router from "./service/router"
-import * as protocol from "./service/protocol"
-import instanceService from "./service/instance_service"
+import * as router from "./service/router";
+import * as protocol from "./service/protocol";
+import instanceService from "./service/instance_service";
 
 // Websocket server
 const io = new Server(config.port, {
@@ -91,7 +89,7 @@ logger.info("It is recommended to use the exit command to close the exit program
 logger.info("--------------------");
 console.log("");
 
-import "./service/ui"
+import "./service/ui";
 
 process.on("SIGINT", function () {
   console.log("\n\n\n\n");

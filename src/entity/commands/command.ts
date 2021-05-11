@@ -7,10 +7,8 @@
  * @License: MIT
  */
 
-
 export default class InstanceCommand {
-
-  public info: string
+  public info: string;
 
   constructor(info: string) {
     this.info = info;
@@ -19,4 +17,4 @@ export default class InstanceCommand {
   exec(instance: any) {
     return instance;
   }
-};
+}

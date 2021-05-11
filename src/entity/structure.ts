@@ -7,13 +7,11 @@
  * @License: MIT
  */
 
-
-import fs from "fs-extra"
+import fs from "fs-extra";
 
 // 数据模型类
 // 用作数据与真实文件之间的抽象关系，数据模型保存的所有数据均会序列化成 JSON 格式保存在文件中
 export default class DataStructure {
-
   private __filename__: string;
 
   [_: string]: any;
@@ -43,5 +41,3 @@ export default class DataStructure {
     return fs.existsSync(this.__filename__);
   }
 }
-
-

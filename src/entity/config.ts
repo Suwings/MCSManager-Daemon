@@ -5,9 +5,8 @@
  * @Description: 守护进程配置类
  */
 
-
-import { v4 } from "uuid"
-import path from "path"
+import { v4 } from "uuid";
+import path from "path";
 import DataStructure from "./structure";
 
 // 守护进程配置类

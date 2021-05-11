@@ -7,9 +7,7 @@
  * @License: MIT
  */
 
-
-import readline from "readline"
-
+import readline from "readline";
 
 import * as protocol from "./protocol";
 import instanceService from "./instance_service";
@@ -19,7 +17,6 @@ import StartCommand from "../entity/commands/start";
 import StopCommand from "../entity/commands/stop";
 import KillCommand from "../entity/commands/kill";
 import SendCommand from "../entity/commands/cmd";
-
 
 const rl = readline.createInterface({
   input: process.stdin,

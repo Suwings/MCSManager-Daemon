@@ -7,12 +7,11 @@
  * @License: MIT
  */
 
-// eslint-disable-next-line no-unused-vars
-import Instance from "../instance"
+import Instance from "../instance";
 import logger from "../../service/log";
 
-import InstanceCommand from "./command"
-import * as childProcess from "child_process"
+import InstanceCommand from "./command";
+import * as childProcess from "child_process";
 
 class StartupError extends Error {
   constructor(msg: string) {
@@ -21,8 +20,7 @@ class StartupError extends Error {
 }
 
 export default class StartCommand extends InstanceCommand {
-
-  public source: string
+  public source: string;
 
   constructor(source = "Unknown") {
     super("StartCommand");
@@ -79,4 +77,4 @@ export default class StartCommand extends InstanceCommand {
       instance.setLock(false);
     }
   }
-};
+}

@@ -1,31 +1,28 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-11 13:04:49
+ * @LastEditTime: 2021-05-11 13:18:55
  * @Description: instance service
  * @Projcet: MCSManager Daemon
  * @License: MIT
  */
-// eslint-disable-next-line no-unused-vars
-import fs from "fs-extra"
-import path from "path"
+
+import fs from "fs-extra";
+import path from "path";
 
 import Instance from "../entity/instance";
 import EventEmitter from "events";
 import KillCommand from "../entity/commands/kill";
 import logger from "./log";
 
-import { v4 } from "uuid"
+import { v4 } from "uuid";
 
 class InstanceService extends EventEmitter {
-
   public readonly instances = new Map<String, Instance>();
 
   constructor() {
     super();
-
   }
-
 
   loadInstances(dir: string) {
     const files = fs.readdirSync(dir);
@@ -61,38 +58,31 @@ class InstanceService extends EventEmitter {
     });
   }
 
-
   removeInstance(instanceUuid: string) {
     const instance = this.getInstance(instanceUuid);
     if (instance) instance.destroy();
-    this.instances.delete(instanceUuid)
+    this.instances.delete(instanceUuid);
     return true;
   }
 
-
   getInstance(instanceUuid: string) {
-    return this.instances.get(instanceUuid)
+    return this.instances.get(instanceUuid);
   }
 
   exists(instanceUuid: string) {
     return this.instances.has(instanceUuid);
   }
 
-
   getAllInstance() {
     return this.instances;
   }
-
 
   getInstancesSize(): number {
     return this.instances.size;
   }
 
-
   forEachInstances(callback: (instance: Instance, id: string) => void) {
-    this.instances.forEach((v) => {
-
-    })
+    this.instances.forEach((v) => { });
     for (const id in this.instances) {
       callback(this.instances.get(id), id);
     }

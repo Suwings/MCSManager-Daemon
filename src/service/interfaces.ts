@@ -8,8 +8,8 @@
  */
 
 export interface IInstanceDetail {
-  instanceUuid: string
-  started: number
-  status: number
-  config: any
+  instanceUuid: string;
+  started: number;
+  status: number;
+  config: any;
 }

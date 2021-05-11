@@ -9,6 +9,5 @@
 import { Socket } from "socket.io";
 
 export default class RouterContext {
-
-  constructor(public uuid: string, public socket: Socket, public session?: any) { }
-};
+  constructor(public uuid: string, public socket: Socket, public session?: any) {}
+}

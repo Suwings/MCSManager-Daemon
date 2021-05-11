@@ -7,12 +7,11 @@
  * @License: MIT
  */
 
-import Instance from "../instance"
-import InstanceCommand from "./command"
-import SendCommand from "./cmd"
+import Instance from "../instance";
+import InstanceCommand from "./command";
+import SendCommand from "./cmd";
 
 export default class StopCommand extends InstanceCommand {
-
   constructor() {
     super("StopCommand");
   }
@@ -30,4 +29,4 @@ export default class StopCommand extends InstanceCommand {
     }
     return instance;
   }
-};
+}

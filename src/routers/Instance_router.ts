@@ -5,9 +5,9 @@
  * @Description: 应用实例相关控制器
  */
 
-import { v4 } from "uuid"
+import { v4 } from "uuid";
 
-import * as protocol from "../service/protocol"
+import * as protocol from "../service/protocol";
 import { routerApp } from "../service/router";
 import instanceService from "../service/instance_service";
 import Instance from "../entity/instance";
@@ -46,7 +46,7 @@ routerApp.on("instance/overview", (ctx) => {
       status: instance.status(),
       config: instance.config
     });
-  })
+  });
 
   protocol.msg(ctx, "instance/overview", overview);
 });
@@ -69,12 +69,12 @@ routerApp.on("instance/detail", (ctx, data) => {
 
 // 新建应用实例
 routerApp.on("instance/new", (ctx, data) => {
-  const nickname = (data.nickname);
-  const command = (data.command);
-  const cwd = (data.cwd);
-  const stopCommand = (data.stopCommand) || "^C";
-  const ie = (data.ie);
-  const oe = (data.oe);
+  const nickname = data.nickname;
+  const command = data.command;
+  const cwd = data.cwd;
+  const stopCommand = data.stopCommand || "^C";
+  const ie = data.ie;
+  const oe = data.oe;
   try {
     const newInstance = instanceService.createInstance({
       nickname: nickname,
