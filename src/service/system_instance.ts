@@ -82,7 +82,7 @@ class InstanceSubsystem extends EventEmitter {
   }
 
   forEachInstances(callback: (instance: Instance, id: string) => void) {
-    this.instances.forEach((v) => { });
+    this.instances.forEach((v) => {});
     for (const id in this.instances) {
       callback(this.instances.get(id), id);
     }

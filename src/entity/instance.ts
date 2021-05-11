@@ -14,10 +14,9 @@ import InstanceCommand from "./commands/command";
 import DataStructure from "./structure";
 import globalConfig from "./config";
 
-console.log("本模块文件的其他代码。。。")
+console.log("本模块文件的其他代码。。。");
 
 export default class Instance extends EventEmitter {
-
   // 实例类静态变量
   public static readonly STATUS_BUSY = -1;
   public static readonly STATUS_STOP = 0;
@@ -136,7 +135,6 @@ export default class Instance extends EventEmitter {
 }
 
 class InstanceConfig extends DataStructure {
-
   public nickname = "";
   public startCommand = "";
   public stopCommand = "";
@@ -145,8 +143,8 @@ class InstanceConfig extends DataStructure {
   public oe = "utf-8";
   public createDatetime = new Date().toLocaleDateString();
   public lastDatetime = "--";
-  public type = Instance.TYPE_UNIVERSAL;// Instance type like: Minecraft,Webwhell...
-  public tag: string[] = [];// Instance tag like: Cloud1 Group2...
+  public type = Instance.TYPE_UNIVERSAL; // Instance type like: Minecraft,Webwhell...
+  public tag: string[] = []; // Instance tag like: Cloud1 Group2...
 
   constructor(path: string) {
     super(path);

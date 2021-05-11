@@ -8,5 +8,5 @@
  */
 
 export default class Structure {
-  constructor(public uuid: string, public className: string) { }
+  constructor(public uuid: string, public className: string) {}
 }
