@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2021-03-24 19:51:50
- * @LastEditTime: 2021-05-11 08:57:02
+ * @LastEditTime: 2021-05-11 09:17:40
  * @Description:
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -17,7 +17,7 @@ import * as childProcess from "child_process"
 // const iconv = require("iconv-lite");
 
 class StartupError extends Error {
-  constructor(msg) {
+  constructor(msg: string) {
     super(msg);
   }
 }
@@ -35,7 +35,7 @@ export default class StartCommand extends InstanceCommand {
    * @param {Instance} instance
    * @return {void}
    */
-  exec(instance) {
+  exec(instance: Instance) {
     const instanceStatus = instance.status();
     if (instanceStatus != Instance.STATUS_STOP) {
       throw new StartupError("This instance status is NOT STATUS_STOP.");

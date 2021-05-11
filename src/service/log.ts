@@ -1,12 +1,14 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-10 20:47:48
+ * @LastEditTime: 2021-05-11 09:40:31
  * @Projcet: MCSManager Daemon
  * @License: MIT
  */
 
-const log4js = require("log4js");
+
+
+import * as log4js from "log4js"
 const LOG_FILE_PATH = "logs/current.log";
 
 log4js.configure({
@@ -37,17 +39,5 @@ log4js.configure({
 
 const logger = log4js.getLogger("default");
 
-function fullTime() {
-  const date = new Date();
-  return `${date.getFullYear()}/${date.getMonth()}/${date.getDate()}`;
-}
 
-function fullLocalTime() {
-  return new Date().toLocaleTimeString();
-}
-
-module.exports = {
-  logger,
-  fullTime,
-  fullLocalTime
-};
+export default logger;

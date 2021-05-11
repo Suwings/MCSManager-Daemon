@@ -47,7 +47,7 @@ export default class Instance extends EventEmitter {
   /**
    * @param {string} startCommand
    */
-  constructor(instanceUuid) {
+  constructor(instanceUuid: string) {
     super();
 
     //Basic information
@@ -82,7 +82,7 @@ export default class Instance extends EventEmitter {
 
 
   // 对本实例执行对应的命令 别名
-  exec(command) {
+  exec(command: InstanceCommand) {
     this.execCommand(command);
   }
 
@@ -149,7 +149,7 @@ export default class Instance extends EventEmitter {
 
 
 class InstanceConfig extends DataStructure {
-  constructor(path) {
+  constructor(path: string) {
     super(path);
     this.nickname = "";
     this.startCommand = "";
@@ -166,7 +166,7 @@ class InstanceConfig extends DataStructure {
     this.tag = [];
   }
 
-  parameters(cfg) {
+  parameters(cfg: any) {
     this.nickname = cfg.nickname || this.nickname || "DefaultInstance_" + new Date().getTime();
     this.startCommand = cfg.startCommand || this.startCommand || "";
     this.stopCommand = cfg.stopCommand || this.stopCommand || "^C";
@@ -182,7 +182,7 @@ class InstanceConfig extends DataStructure {
 
 
 class InstanceCommandError extends Error {
-  constructor(msg) {
+  constructor(msg: string) {
     super(msg);
   }
 }

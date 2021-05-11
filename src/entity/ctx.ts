@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2021-04-26 15:24:54
- * @LastEditTime: 2021-05-11 09:12:04
+ * @LastEditTime: 2021-05-11 09:16:48
  * @Description: 路由上下文
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -16,7 +16,7 @@ export default class RouterContext {
   public uuid: string
   public socket: Socket
 
-  constructor(uuid, socket) {
+  constructor(uuid: string, socket: Socket) {
     this.uuid = uuid;
     this.socket = socket;
   }

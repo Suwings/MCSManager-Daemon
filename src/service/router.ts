@@ -1,52 +1,51 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-11 08:24:48
+ * @LastEditTime: 2021-05-11 09:46:20
  * @Description: Route navigator, used to analyze the Socket.io protocol and encapsulate and forward to a custom route
  * @Projcet: MCSManager Daemon
  * @License: MIT
  */
 
-const fs = require("fs-extra");
-const path = require("path");
-const { EventEmitter } = require("events");
-// eslint-disable-next-line no-unused-vars
-const { Socket } = require("socket.io");
-const { logger } = require("./log");
-const RouterContext = require("../entity/ctx");
+import fs from "fs-extra"
+import path from "path"
+import { EventEmitter } from "events"
+import { Socket } from "socket.io"
+import logger from "./log"
+import RouterContext from "../entity/ctx"
+
+// const fs = require("fs-extra");
+// const path = require("path");
+// const { EventEmitter } = require("events");
+// // eslint-disable-next-line no-unused-vars
+// const { Socket } = require("socket.io");
+// const { logger } = require("./log");
+// const RouterContext = require("../entity/ctx");
 
 // Routing controller class (singleton class)
 class RouterApp extends EventEmitter {
+
+  public readonly middlewares: Array<Function>
+
   constructor() {
     super();
     this.middlewares = [];
   }
 
-  /**
-   * @param {string} event
-   * @param {RouterContext} ctx
-   * @param {string|Object} data
-   */
-  emit(event, ctx, data) {
+
+  emitRouter(event: string, ctx: RouterContext, data: any) {
     super.emit(event, ctx, data);
     return this;
   }
 
-  /**
-   * @param {string} event event
-   * @param {(ctx: RouterContext, data: string) => void} fn
-   * @return {RouterApp}
-   */
-  on(event, fn) {
-    // logger.info(`Register event: ${event} `);
+
+  on(event: string, fn: (ctx: RouterContext, data: any) => void) {
+    logger.info(` Register event: ${event} `);
     return super.on(event, fn);
   }
 
-  /**
-   * Load middleware
-   * @param {(event: string, ctx: RouterContext, data: string, next: Function) => void} fn
-   */
-  use(fn) {
+
+  use(fn: (event: string, ctx: RouterContext, data: string, next: Function) => void) {
     this.middlewares.push(fn);
   }
 
@@ -66,13 +65,13 @@ module.exports.routerApp = routerApp;
  * Based on Socket.io for routing decentralization and secondary forwarding
  * @param {Socket} socket
  */
-module.exports.navigation = (socket) => {
+module.exports.navigation = (socket: Socket) => {
   // Register all events with Socket
   for (const event of routerApp.eventNames()) {
     socket.on(event, (protocol) => {
       if (!protocol) return logger.info(`session $(socket.id) request data protocol format is incorrect`);
       const ctx = new RouterContext(protocol.uuid, socket);
-      routerApp.emit(event, ctx, protocol.data);
+      routerApp.emitRouter(event as string, ctx, protocol.data);
     });
   }
   // Register all middleware with Socket

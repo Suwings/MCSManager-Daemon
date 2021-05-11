@@ -9,7 +9,7 @@ testServer/
 docker_temp/
 toprettier.bat
 
-*.json
+config.json
 *.bat
 
 # config files

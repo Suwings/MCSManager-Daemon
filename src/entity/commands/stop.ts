@@ -17,7 +17,7 @@ export default class StopCommand extends InstanceCommand {
     super("StopCommand");
   }
 
-  exec(instance) {
+  exec(instance: Instance) {
     const stopCommand = instance.config.stopCommand;
     if (instance.status() == Instance.STATUS_STOP || !instance.process || !instance.process.pid) {
       throw new Error("The instance is not started and cannot be stopped.");
