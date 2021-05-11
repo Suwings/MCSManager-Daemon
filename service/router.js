@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-10 21:03:19
+ * @LastEditTime: 2021-05-11 08:24:48
  * @Description: Route navigator, used to analyze the Socket.io protocol and encapsulate and forward to a custom route
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -89,7 +89,7 @@ module.exports.navigation = (socket) => {
 // Import all routing layer classes
 function importController() {
   logger.info("Loading routing controller and middleware...");
-  const routerPath = path.normalize(path.join(__dirname, "../controller/"));
+  const routerPath = path.normalize(path.join(__dirname, "../routers/"));
   const jsList = fs.readdirSync(routerPath);
   for (var name of jsList) {
     name = name.split(".")[0];
