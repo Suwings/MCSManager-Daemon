@@ -7,13 +7,17 @@
 
 import { EventEmitter } from "events";
 import * as iconv from "iconv-lite";
-import InstanceCommand from "./commands/command";
-import * as path from "path";
 import { ChildProcess } from "child_process";
+import * as path from "path";
+
+import InstanceCommand from "./commands/command";
 import DataStructure from "./structure";
 import globalConfig from "./config";
 
+console.log("本模块文件的其他代码。。。")
+
 export default class Instance extends EventEmitter {
+
   // 实例类静态变量
   public static readonly STATUS_BUSY = -1;
   public static readonly STATUS_STOP = 0;
@@ -29,19 +33,12 @@ export default class Instance extends EventEmitter {
 
   public instanceStatus: number;
   public instanceUuid: string;
-
-  // Action lock
   public lock: boolean;
-
-  // Config init
-  public config: InstanceConfig;
-
-  public process: ChildProcess;
   public startCount: number;
 
-  /**
-   * @param {string} startCommand
-   */
+  public config: InstanceConfig;
+  public process: ChildProcess;
+
   constructor(instanceUuid: string) {
     super();
 
@@ -139,21 +136,20 @@ export default class Instance extends EventEmitter {
 }
 
 class InstanceConfig extends DataStructure {
+
+  public nickname = "";
+  public startCommand = "";
+  public stopCommand = "";
+  public cwd = "";
+  public ie = "utf-8";
+  public oe = "utf-8";
+  public createDatetime = new Date().toLocaleDateString();
+  public lastDatetime = "--";
+  public type = Instance.TYPE_UNIVERSAL;// Instance type like: Minecraft,Webwhell...
+  public tag: string[] = [];// Instance tag like: Cloud1 Group2...
+
   constructor(path: string) {
     super(path);
-    this.nickname = "";
-    this.startCommand = "";
-    this.stopCommand = "";
-    this.cwd = "";
-    this.ie = "utf-8";
-    this.oe = "utf-8";
-    this.createDatetime = new Date().toLocaleDateString();
-    this.lastDatetime = "--";
-
-    // Instance type like: Minecraft,Webwhell...
-    this.type = Instance.TYPE_UNIVERSAL;
-    // Instance tag like: Cloud1 Group2...
-    this.tag = [];
   }
 
   parameters(cfg: any) {
