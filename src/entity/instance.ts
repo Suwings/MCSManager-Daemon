@@ -106,6 +106,7 @@ export default class Instance extends EventEmitter {
     if (this.config) this.config.save();
   }
 
+  // 释放资源（主要释放进程相关的资源）
   releaseResources() {
     if (this.process && this.process.stdout && this.process.stderr) {
       // 移除所有动态新增的事件监听者
