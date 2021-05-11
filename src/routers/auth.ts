@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-11 12:04:44
+ * @LastEditTime: 2021-05-11 12:34:57
  * @Description: 身份认证控制器组
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -14,7 +14,7 @@ import logger from "../service/log";
 import RouterContext from "../entity/ctx";
 
 // 权限认证中间件
-routerApp.use((event, ctx, data, next) => {
+routerApp.use((event, ctx, _, next) => {
   const socket = ctx.socket;
   // 除 auth 控制器是公开访问，其他控制器必须得到授权才可访问
   if (event === "auth") return next();

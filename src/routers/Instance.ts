@@ -4,9 +4,10 @@
  * @License: MIT
  * @Description: 应用实例相关控制器
  */
-import uuid from "uuid"
-import * as protocol from "../service/protocol"
 
+import { v4 } from "uuid"
+
+import * as protocol from "../service/protocol"
 import { routerApp } from "../service/router";
 import instanceService from "../service/instance_service";
 import Instance from "../entity/instance";
@@ -73,7 +74,7 @@ routerApp.on("instance/new", (ctx, data) => {
   const command = data.command;
   const cwd = data.cwd;
   const stopCommand = data.stopCommand || "^C";
-  const newUuid = uuid.v4().replace(/-/gim, "");
+  const newUuid = v4().replace(/-/gim, "");
   try {
     const instance = new Instance(newUuid);
     instance.parameters({

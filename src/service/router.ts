@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-11 12:10:53
+ * @LastEditTime: 2021-05-11 12:34:37
  * @Description: Route navigator, used to analyze the Socket.io protocol and encapsulate and forward to a custom route
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -11,7 +11,7 @@ import { EventEmitter } from "events"
 import { Socket } from "socket.io"
 import logger from "./log"
 import RouterContext from "../entity/ctx"
-
+import { IPacket } from "../service/protocol"
 
 // Routing controller class (singleton class)
 class RouterApp extends EventEmitter {
@@ -56,11 +56,13 @@ export const routerApp = new RouterApp();
  * @param {Socket} socket
  */
 export function navigation(socket: Socket) {
+  // Full-life session variables (Between connection and disconnection)
+  const session: any = {}
   // Register all events with Socket
   for (const event of routerApp.eventNames()) {
-    socket.on(event, (protocol) => {
+    socket.on(event, (protocol: IPacket) => {
       if (!protocol) return logger.info(`session $(socket.id) request data protocol format is incorrect`);
-      const ctx = new RouterContext(protocol.uuid, socket);
+      const ctx = new RouterContext(protocol.uuid, socket, session);
       routerApp.emitRouter(event as string, ctx, protocol.data);
     });
   }
@@ -69,7 +71,7 @@ export function navigation(socket: Socket) {
     socket.use((packet, next) => {
       const protocol = packet[1];
       if (!protocol) return logger.info(`session $(socket.id) request data protocol format is incorrect`);
-      const ctx = new RouterContext(protocol.uuid, socket);
+      const ctx = new RouterContext(protocol.uuid, socket, session);
       fn(packet[0], ctx, protocol.data, next);
     });
   }
@@ -86,3 +88,7 @@ function importController() {
   logger.info(`Complete. Total routing controller ${routerApp.eventNames().length}, middleware ${routerApp.middlewares.length}.`);
 }
 importController();
+
+interface ISession {
+  [_: string]: any
+}

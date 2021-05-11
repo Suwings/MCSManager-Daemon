@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-11 12:08:04
+ * @LastEditTime: 2021-05-11 12:27:40
  * @Description: Daemon service startup file
  */
 
@@ -53,7 +53,7 @@ try {
 }
 
 // Register link event
-io.on("connection", (socket) => {
+io.on("connection", (socket: Socket) => {
   logger.info(`Session ${socket.id}(${socket.handshake.address}) is linked`);
 
   // Join the global Socket object

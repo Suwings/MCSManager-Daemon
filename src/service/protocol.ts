@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-11 11:16:25
+ * @LastEditTime: 2021-05-11 12:23:39
  * @Description: 定义网络协议与常用发送/广播/解析功能，客户端也应当拥有此文件
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -15,7 +15,7 @@ const STATUS_OK = 200;
 const STATUS_ERR = 500;
 
 // 数据包格式定义
-interface IPacket {
+export interface IPacket {
   uuid?: string
   status: number
   event: string
