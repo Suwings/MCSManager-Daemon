@@ -1,20 +1,9 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-11 12:27:40
+ * @LastEditTime: 2021-05-11 12:37:25
  * @Description: Daemon service startup file
  */
-
-import config from "./entity/config";
-import logger from "./service/log";
-
-import fs from "fs-extra"
-import { Server, Socket } from "socket.io";
-
-import * as router from "./service/router"
-import * as protocol from "./service/protocol"
-import instanceService from "./service/instance_service"
-
 
 console.log(`______  _______________________  ___                                         
 ___   |/  /_  ____/_  ___/__   |/  /_____ _____________ _______ _____________
@@ -28,8 +17,20 @@ _  /_/ // /_/ //  __/  / / / / / /_/ /  / / /
 /_____/ \\__,_/ \\___//_/ /_/ /_/\\____//_/ /_/ Version 1.0
 `);
 
+
+
+import fs from "fs-extra"
+import { Server, Socket } from "socket.io";
+
+import logger from "./service/log";
 logger.info(`Welcome to use MCSManager daemon.`);
 
+import config from "./entity/config";
+import * as router from "./service/router"
+import * as protocol from "./service/protocol"
+import instanceService from "./service/instance_service"
+
+// Websocket server
 const io = new Server(config.port, {
   serveClient: false,
   pingInterval: 10000,

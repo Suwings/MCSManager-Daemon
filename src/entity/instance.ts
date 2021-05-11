@@ -55,7 +55,7 @@ export default class Instance extends EventEmitter {
     this.lock = false;
 
     // Config init
-    this.config = new InstanceConfig(path.join(globalConfig.config.instanceDirectory, instanceUuid));
+    this.config = new InstanceConfig(path.join(globalConfig.instanceDirectory, instanceUuid));
     this.config.load();
 
     this.process = null;

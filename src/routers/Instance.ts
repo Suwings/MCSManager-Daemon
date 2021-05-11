@@ -17,6 +17,7 @@ import StartCommand from "../entity/commands/start";
 import StopCommand from "../entity/commands/stop";
 import SendCommand from "../entity/commands/cmd";
 import KillCommand from "../entity/commands/kill";
+import { IInstanceDetail } from "../service/interfaces";
 
 // 部分实例操作路由器验证中间件
 routerApp.use((event, ctx, data, next) => {
@@ -37,18 +38,16 @@ routerApp.use((event, ctx, data, next) => {
 
 // 获取本守护进程实例总览
 routerApp.on("instance/overview", (ctx) => {
-  const instances = instanceService.getAllInstance();
-  const overview = [];
-  for (const name in instances) {
-    const instance = instanceService.getInstance(name);
-    if (!instance) continue;
+  const overview: IInstanceDetail[] = [];
+  instanceService.getAllInstance().forEach((instance) => {
     overview.push({
       instanceUuid: instance.instanceUuid,
-      startCount: instance.startCount,
+      started: instance.startCount,
       status: instance.status(),
       config: instance.config
     });
-  }
+  })
+
   protocol.msg(ctx, "instance/overview", overview);
 });
 
@@ -59,7 +58,7 @@ routerApp.on("instance/detail", (ctx, data) => {
     const instance = instanceService.getInstance(instanceUuid);
     protocol.msg(ctx, "instance/detail", {
       instanceUuid: instance.instanceUuid,
-      startCount: instance.startCount,
+      started: instance.startCount,
       status: instance.status(),
       config: instance.config
     });
@@ -70,10 +69,10 @@ routerApp.on("instance/detail", (ctx, data) => {
 
 // 新建应用实例
 routerApp.on("instance/new", (ctx, data) => {
-  const nickname = data.nickname;
-  const command = data.command;
-  const cwd = data.cwd;
-  const stopCommand = data.stopCommand || "^C";
+  const nickname = String(data.nickname);
+  const command = String(data.command);
+  const cwd = String(data.cwd);
+  const stopCommand = String(data.stopCommand) || "^C";
   const newUuid = v4().replace(/-/gim, "");
   try {
     const instance = new Instance(newUuid);
