@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-11 15:45:41
+ * @LastEditTime: 2021-05-12 12:35:07
  * @Description: instance service
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -24,6 +24,7 @@ class InstanceSubsystem extends EventEmitter {
     super();
   }
 
+  // init all instances from local files
   loadInstances(dir: string) {
     const files = fs.readdirSync(dir);
     for (const fileName of files) {

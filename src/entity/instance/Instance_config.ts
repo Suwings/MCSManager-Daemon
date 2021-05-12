@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2021-05-12 12:04:13
- * @LastEditTime: 2021-05-12 12:18:07
+ * @LastEditTime: 2021-05-12 12:36:04
  * @Description:
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -21,6 +21,8 @@ export default class InstanceConfig extends DataStructure {
   public lastDatetime = "--";
   public type = Instance.TYPE_UNIVERSAL;    // Instance type like: Minecraft,Webwhell...
   public tag: string[] = [];                // Instance tag like: Cloud1 Group2...
+
+  // Extend
   public docker: IDockerConfig = { image: "", xmx: 1, ports: [] };
 
   constructor(path: string) {
