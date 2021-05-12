@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-12 12:35:07
+ * @LastEditTime: 2021-05-12 12:53:45
  * @Description: instance service
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -74,29 +74,14 @@ class InstanceSubsystem extends EventEmitter {
     return this.instances.has(instanceUuid);
   }
 
-  getAllInstance() {
-    return this.instances;
-  }
-
-  getInstancesSize(): number {
-    return this.instances.size;
-  }
-
-  forEachInstances(callback: (instance: Instance, id: string) => void) {
-    this.instances.forEach((v) => { });
-    for (const id in this.instances) {
-      callback(this.instances.get(id), id);
-    }
-  }
-
   exit() {
-    this.forEachInstances((instance) => {
+    this.instances.forEach((instance) => {
       if (instance.status() != Instance.STATUS_STOP) {
-        logger.info(`instance ${instance.config.nickname} (${instance.instanceUuid}) is running or busy, and is being forced to end.`);
+        logger.info(`Instance ${instance.config.nickname} (${instance.instanceUuid}) is running or busy, and is being forced to end.`);
         instance.execCommand(new KillCommand());
       }
       instance.config.save();
-      logger.info(`instance ${instance.config.nickname} (${instance.instanceUuid}) data saved successfully.`);
+      logger.info(`Instance ${instance.config.nickname} (${instance.instanceUuid}) saved successfully.`);
     });
   }
 }

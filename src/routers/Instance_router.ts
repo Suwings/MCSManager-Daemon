@@ -37,7 +37,7 @@ routerApp.use((event, ctx, data, next) => {
 // 获取本守护进程实例总览
 routerApp.on("instance/overview", (ctx) => {
   const overview: IInstanceDetail[] = [];
-  InstanceSubsystem.getAllInstance().forEach((instance) => {
+  InstanceSubsystem.instances.forEach((instance) => {
     overview.push({
       instanceUuid: instance.instanceUuid,
       started: instance.startCount,

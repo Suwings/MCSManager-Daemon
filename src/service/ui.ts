@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2021-03-26 18:41:40
- * @LastEditTime: 2021-05-11 15:46:54
+ * @LastEditTime: 2021-05-12 12:55:47
  * @Description: Terminal interaction logic. Since the logic is simple and does not require authentication and inspection, all UI business codes will be in one file.
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -23,14 +23,14 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-console.log("[User Interface] program has a simple terminal interaction function, type help to see more information.");
+console.log("[User Interface] program has a simple terminal interaction function, type \"help\" to see more information.");
 
 function stdin() {
   rl.question("> ", (answer) => {
     try {
       const cmds = answer.split(" ");
       logger.info(`[Terminal] ${answer}`);
-      const result = command(cmds[1], cmds[2], cmds[3], cmds[4]);
+      const result = command(cmds[0], cmds[1], cmds[2], cmds[3]);
       if (result) console.log(result);
       else console.log(`Command ${answer} does not exist, type help to get help.`);
     } catch (err) {
@@ -71,26 +71,22 @@ function command(cmd: string, p1: string, p2: string, p3: string) {
   }
 
   if (cmd === "instances") {
-    const objs = InstanceSubsystem.getAllInstance();
+    const objs = InstanceSubsystem.instances;
     let result = "instance name | instance UUID | status code\n";
-    for (const id in objs) {
-      const instance = objs.get(id);
-      result += `${instance.config.nickname} ${instance.instanceUuid} ${instance.status()}\n`;
-    }
+    objs.forEach((v) => {
+      result += `${v.config.nickname} ${v.instanceUuid} ${v.status()}\n`;
+    })
     result += "\nStatus Explanation:\n Busy=-1;Stop=0;Stopping=1;Starting=2;Running=3;\n";
     return result;
   }
 
   if (cmd === "sockets") {
     const sockets = protocol.socketObjects();
-    let result = "";
-    let count = 0;
-    result += "IP address | session identifier\n";
-    for (const id in sockets) {
-      count++;
-      result += `${sockets.get(id).handshake.address} ${id}\n`;
-    }
-    result += `Total ${count} online.\n`;
+    let result = "IP address   |   identifier\n";
+    sockets.forEach((v) => {
+      result += `${v.handshake.address} ${v.id}\n`;
+    })
+    result += `Total ${sockets.size} online.\n`;
     return result;
   }
 
@@ -103,9 +99,9 @@ function command(cmd: string, p1: string, p2: string, p3: string) {
       logger.info("Preparing to shut down the daemon...");
       config.save();
       InstanceSubsystem.exit();
-      logger.info("Data saved, thanks for using, goodbye!");
+      // logger.info("Data saved, thanks for using, goodbye!");
       logger.info("The data is saved, thanks for using, goodbye!");
-      logger.info("process.exit(0);");
+      logger.info("closed.");
       process.exit(0);
     } catch (err) {
       logger.error("Failed to end the program. Please check the file permissions and try again. If you still can't close it, please use Ctrl+C to close.", err);

@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-11 15:46:43
+ * @LastEditTime: 2021-05-12 12:52:53
  * @Description: Daemon service startup file
  */
 
@@ -45,7 +45,7 @@ if (!fs.existsSync(config.instanceDirectory)) {
 try {
   logger.info("Loading local instance file...");
   InstanceSubsystem.loadInstances(config.instanceDirectory);
-  logger.info(`All local instances are loaded, a total of ${InstanceSubsystem.getInstancesSize()}.`);
+  logger.info(`All local instances are loaded, a total of ${InstanceSubsystem.instances.size}.`);
 } catch (err) {
   logger.error("Failed to read the local instance file, this problem must be fixed to start:", err);
   process.exit(-1);
@@ -92,9 +92,16 @@ console.log("");
 import "./service/ui";
 
 process.on("SIGINT", function () {
-  console.log("\n\n\n\n");
-  logger.warn("SIGINT close process signal detected.");
-  logger.warn("It is recommended to use the exit command to close under normal circumstances, otherwise there is a certain risk of data loss.");
-  logger.warn("Closed...");
-  process.exit(0);
+  try {
+    console.log("\n\n\n\n");
+    logger.warn("SIGINT close process signal detected.");
+    InstanceSubsystem.exit();
+    logger.info("The data is saved, thanks for using, goodbye!");
+    logger.info("Closed.");
+  } catch (err) {
+    logger.error("ERROR:", err);
+  } finally {
+    process.exit(0);
+  }
+
 });
