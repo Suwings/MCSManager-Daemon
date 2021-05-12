@@ -11,7 +11,7 @@ import { ChildProcess } from "child_process";
 import * as path from "path";
 
 import InstanceCommand from "../commands/command";
-import InstanceConfig from "./InstanceConfig";
+import InstanceConfig from "./Instance_config";
 
 import globalConfig from "../config";
 
