@@ -8,7 +8,7 @@
 import * as protocol from "../service/protocol";
 import { routerApp } from "../service/router";
 import InstanceSubsystem from "../service/system_instance";
-import Instance from "../entity/instance";
+import Instance from "../entity/instance/instance";
 import logger from "../service/log";
 
 import StartCommand from "../entity/commands/start";

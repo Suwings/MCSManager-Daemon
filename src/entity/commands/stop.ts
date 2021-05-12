@@ -7,7 +7,7 @@
  * @License: MIT
  */
 
-import Instance from "../instance";
+import Instance from "../instance/instance";
 import InstanceCommand from "./command";
 import SendCommand from "./cmd";
 

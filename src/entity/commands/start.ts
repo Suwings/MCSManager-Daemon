@@ -7,7 +7,7 @@
  * @License: MIT
  */
 
-import Instance from "../instance";
+import Instance from "../instance/instance";
 import logger from "../../service/log";
 
 import InstanceCommand from "./command";

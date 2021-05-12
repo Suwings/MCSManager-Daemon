@@ -7,7 +7,7 @@
  * @License: MIT
  */
 
-import Instance from "../instance";
+import Instance from "../instance/instance";
 import InstanceCommand from "./command";
 
 export default class KillCommand extends InstanceCommand {

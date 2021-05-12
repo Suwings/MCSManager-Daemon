@@ -10,11 +10,10 @@ import * as iconv from "iconv-lite";
 import { ChildProcess } from "child_process";
 import * as path from "path";
 
-import InstanceCommand from "./commands/command";
-import DataStructure from "./structure";
-import globalConfig from "./config";
+import InstanceCommand from "../commands/command";
+import InstanceConfig from "./InstanceConfig";
 
-console.log("本模块文件的其他代码。。。");
+import globalConfig from "../config";
 
 export default class Instance extends EventEmitter {
   // 实例类静态变量
@@ -50,7 +49,6 @@ export default class Instance extends EventEmitter {
 
     // Config init
     this.config = new InstanceConfig(path.join(globalConfig.instanceDirectory, instanceUuid));
-    this.config.load();
 
     this.process = null;
     this.startCount = 0;
@@ -66,8 +64,8 @@ export default class Instance extends EventEmitter {
 
   // 对本实例执行对应的命令
   execCommand(command: InstanceCommand) {
-    if (this.lock) throw new InstanceCommandError(`This ${command.info} operation cannot be completed because the command executes a deadlock.`);
-    if (this.status() == Instance.STATUS_BUSY) throw new InstanceCommandError(`The status of ${this.instanceUuid} instance is busy and cannot do anything.`);
+    if (this.lock) throw new Error(`This ${command.info} operation cannot be completed because the command executes a deadlock.`);
+    if (this.status() == Instance.STATUS_BUSY) throw new Error(`The status of ${this.instanceUuid} instance is busy and cannot do anything.`);
     command.exec(this);
   }
 
@@ -131,39 +129,5 @@ export default class Instance extends EventEmitter {
   fullTime() {
     const date = new Date();
     return date.toLocaleDateString() + " " + date.getHours() + ":" + date.getMinutes();
-  }
-}
-
-class InstanceConfig extends DataStructure {
-  public nickname = "";
-  public startCommand = "";
-  public stopCommand = "";
-  public cwd = "";
-  public ie = "utf-8";
-  public oe = "utf-8";
-  public createDatetime = new Date().toLocaleDateString();
-  public lastDatetime = "--";
-  public type = Instance.TYPE_UNIVERSAL; // Instance type like: Minecraft,Webwhell...
-  public tag: string[] = []; // Instance tag like: Cloud1 Group2...
-
-  constructor(path: string) {
-    super(path);
-  }
-
-  parameters(cfg: any) {
-    this.nickname = cfg.nickname || this.nickname || "DefaultInstance_" + new Date().getTime();
-    this.startCommand = cfg.startCommand || this.startCommand || "";
-    this.stopCommand = cfg.stopCommand || this.stopCommand || "^C";
-    this.cwd = cfg.cwd || this.cwd || ".";
-    this.ie = cfg.ie || this.ie || "utf-8";
-    this.oe = cfg.oe || this.oe || "utf-8";
-    this.type = cfg.type || this.type || Instance.TYPE_UNIVERSAL;
-    this.save();
-  }
-}
-
-class InstanceCommandError extends Error {
-  constructor(msg: string) {
-    super(msg);
   }
 }

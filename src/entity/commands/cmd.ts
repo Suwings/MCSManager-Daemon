@@ -1,13 +1,13 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2021-03-24 19:51:50
- * @LastEditTime: 2021-05-11 09:06:45
+ * @LastEditTime: 2021-05-12 12:00:39
  * @Description:
  * @Projcet: MCSManager Daemon
  * @License: MIT
  */
 
-import Instance from "../instance";
+import Instance from "../instance/instance";
 import { encode } from "iconv-lite";
 import InstanceCommand from "./command";
 

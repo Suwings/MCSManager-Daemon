@@ -10,7 +10,7 @@
 import fs from "fs-extra";
 import path from "path";
 
-import Instance from "../entity/instance";
+import Instance from "../entity/instance/instance";
 import EventEmitter from "events";
 import KillCommand from "../entity/commands/kill";
 import logger from "./log";
@@ -82,7 +82,7 @@ class InstanceSubsystem extends EventEmitter {
   }
 
   forEachInstances(callback: (instance: Instance, id: string) => void) {
-    this.instances.forEach((v) => {});
+    this.instances.forEach((v) => { });
     for (const id in this.instances) {
       callback(this.instances.get(id), id);
     }
