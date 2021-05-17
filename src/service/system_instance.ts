@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-17 21:25:47
+ * @LastEditTime: 2021-05-17 21:41:06
  * @Description: instance service
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -16,13 +16,13 @@ import KillCommand from "../entity/commands/kill";
 import logger from "./log";
 
 import { v4 } from "uuid";
-// import { IForwardInstanceIO } from "./interfaces";
 import { Socket } from "socket.io";
 
 class InstanceSubsystem extends EventEmitter {
 
   public readonly instances = new Map<string, Instance>();
   public readonly forwardInstanceMap = new Map<string, Array<Socket>>();
+
   constructor() {
     super();
   }
@@ -72,8 +72,8 @@ class InstanceSubsystem extends EventEmitter {
   forward(targetInstanceUuid: string, socket: Socket) {
     if (this.forwardInstanceMap.has(targetInstanceUuid)) {
       const arr = this.forwardInstanceMap.get(targetInstanceUuid);
-      arr.forEach((socket, index) => {
-        if (socket.id == socket.id) throw new Error("Attempt to listen to the same instance")
+      arr.forEach((socket) => {
+        if (socket.id == socket.id) throw new Error("Attempt to listen to the same instance.")
       });
       arr.push(socket);
     } else {
@@ -88,7 +88,14 @@ class InstanceSubsystem extends EventEmitter {
         if (socket.id == sSocket.id) arr.splice(index, 1);
       });
     }
+  }
 
+  forEachForward(instanceUuid: string, callback: (socket: Socket, index: number) => void) {
+    if (this.forwardInstanceMap.has(instanceUuid)) {
+      this.forwardInstanceMap.get(instanceUuid).forEach((socket, index) => {
+        callback(socket, index);
+      });
+    }
   }
 
   getInstance(instanceUuid: string) {
