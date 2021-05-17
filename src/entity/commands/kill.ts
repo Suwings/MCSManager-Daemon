@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2021-03-24 19:51:50
- * @LastEditTime: 2021-05-11 13:17:25
+ * @LastEditTime: 2021-05-17 22:33:24
  * @Description:
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -19,7 +19,7 @@ export default class KillCommand extends InstanceCommand {
     if (instance.process && instance.process.pid) {
       instance.process.kill("SIGKILL");
     }
-    instance.stoped(-3);
+    // instance.stoped(-3);
     instance.setLock(false);
   }
 }

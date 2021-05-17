@@ -95,8 +95,10 @@ export default class Instance extends EventEmitter {
   // 实例已关闭后必须执行的函数
   stoped(code = 0) {
     this.releaseResources();
-    this.instanceStatus = Instance.STATUS_STOP;
-    this.emit("exit", code);
+    if (this.instanceStatus != Instance.STATUS_STOP) {
+      this.instanceStatus = Instance.STATUS_STOP;
+      this.emit("exit", code);
+    }
     if (this.config) this.config.save();
   }
 
@@ -119,7 +121,7 @@ export default class Instance extends EventEmitter {
       if (this.process && this.process.pid) {
         this.process.kill("SIGKILL");
       }
-      this.stoped(-999);
+      // this.stoped(-999);
     } finally {
       this.config.del();
       this.config = null;
