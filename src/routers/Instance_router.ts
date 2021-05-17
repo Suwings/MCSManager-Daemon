@@ -100,6 +100,19 @@ routerApp.on("instance/update", (ctx, data) => {
   }
 });
 
+
+// 请求转发某实例所有IO数据
+routerApp.on("instance/forward", (ctx, data) => {
+  const targetInstanceUuid = data.instanceUuid;
+  try {
+    // InstanceSubsystem.getInstance(targetInstanceUuid);
+    InstanceSubsystem.forward(targetInstanceUuid, ctx.socket);
+    protocol.msg(ctx, "instance/forward", { instanceUuid: targetInstanceUuid });
+  } catch (err) {
+    protocol.error(ctx, "instance/forward", { instanceUuid: targetInstanceUuid, err: err.message });
+  }
+});
+
 // 开启实例
 routerApp.on("instance/open", (ctx, data) => {
   const instanceUuid = data.instanceUuid;

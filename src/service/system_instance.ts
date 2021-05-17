@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-12 12:53:45
+ * @LastEditTime: 2021-05-17 20:09:17
  * @Description: instance service
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -16,9 +16,13 @@ import KillCommand from "../entity/commands/kill";
 import logger from "./log";
 
 import { v4 } from "uuid";
+// import { IForwardInstanceIO } from "./interfaces";
+import { Socket } from "socket.io";
 
 class InstanceSubsystem extends EventEmitter {
-  public readonly instances = new Map<String, Instance>();
+
+  public readonly instances = new Map<string, Instance>();
+  public readonly forwardInstanceMap = new Map<string, Array<Socket>>();
 
   constructor() {
     super();
@@ -64,6 +68,14 @@ class InstanceSubsystem extends EventEmitter {
     if (instance) instance.destroy();
     this.instances.delete(instanceUuid);
     return true;
+  }
+
+  forward(targetInstanceUuid: string, socket: Socket) {
+    if (this.forwardInstanceMap.has(targetInstanceUuid)) {
+      this.forwardInstanceMap.get(targetInstanceUuid).push(socket);
+    } else {
+      this.forwardInstanceMap.set(targetInstanceUuid, [socket]);
+    }
   }
 
   getInstance(instanceUuid: string) {
