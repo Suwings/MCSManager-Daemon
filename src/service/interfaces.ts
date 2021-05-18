@@ -7,9 +7,6 @@
  * @License: MIT
  */
 
-
-
-
 export interface IInstanceDetail {
   instanceUuid: string;
   started: number;

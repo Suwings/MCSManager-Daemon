@@ -19,15 +19,15 @@ export default class InstanceConfig extends DataStructure {
   public oe = "utf-8";
   public createDatetime = new Date().toLocaleDateString();
   public lastDatetime = "--";
-  public type = Instance.TYPE_UNIVERSAL;    // Instance type like: Minecraft,Webwhell...
-  public tag: string[] = [];                // Instance tag like: Cloud1 Group2...
+  public type = Instance.TYPE_UNIVERSAL; // Instance type like: Minecraft,Webwhell...
+  public tag: string[] = []; // Instance tag like: Cloud1 Group2...
 
   // Extend
   public docker: IDockerConfig = { image: "", xmx: 1, ports: [] };
 
   constructor(path: string) {
     super(path);
-    this.load()
+    this.load();
   }
 
   parameters(cfg: any) {
@@ -40,7 +40,4 @@ export default class InstanceConfig extends DataStructure {
     this.type = cfg.type || this.type || Instance.TYPE_UNIVERSAL;
     this.save();
   }
-
 }
-
-

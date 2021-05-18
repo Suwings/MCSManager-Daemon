@@ -9,7 +9,7 @@
 
 // interface of docker config
 export interface IDockerConfig {
-  image: string,
-  xmx: number,
-  ports: number[],
+  image: string;
+  xmx: number;
+  ports: number[];
 }

@@ -23,7 +23,7 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-console.log("[User Interface] program has a simple terminal interaction function, type \"help\" to see more information.");
+console.log('[User Interface] program has a simple terminal interaction function, type "help" to see more information.');
 
 function stdin() {
   rl.question("> ", (answer) => {
@@ -75,7 +75,7 @@ function command(cmd: string, p1: string, p2: string, p3: string) {
     let result = "instance name | instance UUID | status code\n";
     objs.forEach((v) => {
       result += `${v.config.nickname} ${v.instanceUuid} ${v.status()}\n`;
-    })
+    });
     result += "\nStatus Explanation:\n Busy=-1;Stop=0;Stopping=1;Starting=2;Running=3;\n";
     return result;
   }
@@ -85,7 +85,7 @@ function command(cmd: string, p1: string, p2: string, p3: string) {
     let result = "IP address   |   identifier\n";
     sockets.forEach((v) => {
       result += `${v.handshake.address} ${v.id}\n`;
-    })
+    });
     result += `Total ${sockets.size} online.\n`;
     return result;
   }

@@ -18,7 +18,7 @@ InstanceSubsystem.on("data", (instanceUuid: string, text: string) => {
       instanceUuid: instanceUuid,
       text: text
     });
-  })
+  });
 });
 
 // 实例退出事件

@@ -100,7 +100,6 @@ routerApp.on("instance/update", (ctx, data) => {
   }
 });
 
-
 // 请求转发某实例所有IO数据
 routerApp.on("instance/forward", (ctx, data) => {
   const targetInstanceUuid = data.instanceUuid;
@@ -108,10 +107,10 @@ routerApp.on("instance/forward", (ctx, data) => {
   try {
     // InstanceSubsystem.getInstance(targetInstanceUuid);
     if (isforward) {
-      logger.info(`会话 ${ctx.socket.id} 请求转发实例 ${targetInstanceUuid} IO 流`)
+      logger.info(`会话 ${ctx.socket.id} 请求转发实例 ${targetInstanceUuid} IO 流`);
       InstanceSubsystem.forward(targetInstanceUuid, ctx.socket);
     } else {
-      logger.info(`会话 ${ctx.socket.id} 请求取消转发实例 ${targetInstanceUuid} IO 流`)
+      logger.info(`会话 ${ctx.socket.id} 请求取消转发实例 ${targetInstanceUuid} IO 流`);
       InstanceSubsystem.stopForward(targetInstanceUuid, ctx.socket);
     }
     protocol.msg(ctx, "instance/forward", { instanceUuid: targetInstanceUuid });

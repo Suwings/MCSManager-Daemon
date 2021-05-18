@@ -14,5 +14,5 @@ export default class InstanceCommand {
     this.info = info;
   }
 
-  exec(instance: any) { }
+  exec(instance: any) {}
 }

@@ -19,7 +19,6 @@ import { v4 } from "uuid";
 import { Socket } from "socket.io";
 
 class InstanceSubsystem extends EventEmitter {
-
   public readonly instances = new Map<string, Instance>();
   public readonly forwardInstanceMap = new Map<string, Array<Socket>>();
 
@@ -73,7 +72,7 @@ class InstanceSubsystem extends EventEmitter {
     if (this.forwardInstanceMap.has(targetInstanceUuid)) {
       const arr = this.forwardInstanceMap.get(targetInstanceUuid);
       arr.forEach((socket) => {
-        if (socket.id == socket.id) throw new Error("Attempt to listen to the same instance.")
+        if (socket.id == socket.id) throw new Error("Attempt to listen to the same instance.");
       });
       arr.push(socket);
     } else {
