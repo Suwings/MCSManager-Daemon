@@ -168,6 +168,15 @@ routerApp.on("instance/command", (ctx, data) => {
   }
 });
 
+// 向应用实例发送数据流
+routerApp.on("instance/stdin", (ctx, data) => {
+  const instance = InstanceSubsystem.getInstance(data.instanceUuid);
+  try {
+    if (data.ch == "\r") return instance.process.stdin.write("\n");
+    instance.process.stdin.write(data.ch);
+  } catch (err) { }
+});
+
 // 杀死应用实例方法
 routerApp.on("instance/kill", (ctx, data) => {
   const instanceUuid = data.instanceUuid;
