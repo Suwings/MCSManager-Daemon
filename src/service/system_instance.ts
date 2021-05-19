@@ -79,7 +79,7 @@ class InstanceSubsystem extends EventEmitter {
           f = false;
         }
       });
-      if (f) arr.push(socket)
+      if (f) arr.push(socket);
     } else {
       this.forwardInstanceMap.set(targetInstanceUuid, [socket]);
     }
