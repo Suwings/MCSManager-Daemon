@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-17 21:41:06
+ * @LastEditTime: 2021-05-19 17:11:37
  * @Description: instance service
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -71,10 +71,15 @@ class InstanceSubsystem extends EventEmitter {
   forward(targetInstanceUuid: string, socket: Socket) {
     if (this.forwardInstanceMap.has(targetInstanceUuid)) {
       const arr = this.forwardInstanceMap.get(targetInstanceUuid);
-      arr.forEach((socket) => {
-        if (socket.id == socket.id) throw new Error("Attempt to listen to the same instance.");
+      let f = true;
+      arr.forEach((v, index) => {
+        if (socket.id === v.id) {
+          // arr.splice(index, 1);
+          // arr.push(socket);
+          f = false;
+        }
       });
-      arr.push(socket);
+      if (f) arr.push(socket)
     } else {
       this.forwardInstanceMap.set(targetInstanceUuid, [socket]);
     }
