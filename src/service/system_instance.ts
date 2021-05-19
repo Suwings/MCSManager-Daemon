@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-19 17:11:37
+ * @LastEditTime: 2021-05-19 22:46:53
  * @Description: instance service
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -20,7 +20,7 @@ import { Socket } from "socket.io";
 
 class InstanceSubsystem extends EventEmitter {
   public readonly instances = new Map<string, Instance>();
-  public readonly forwardInstanceMap = new Map<string, Array<Socket>>();
+  public readonly forwardInstanceMap = new Map<string, Map<string, Socket>>();
 
   constructor() {
     super();
@@ -69,35 +69,19 @@ class InstanceSubsystem extends EventEmitter {
   }
 
   forward(targetInstanceUuid: string, socket: Socket) {
-    if (this.forwardInstanceMap.has(targetInstanceUuid)) {
-      const arr = this.forwardInstanceMap.get(targetInstanceUuid);
-      let f = true;
-      arr.forEach((v, index) => {
-        if (socket.id === v.id) {
-          // arr.splice(index, 1);
-          // arr.push(socket);
-          f = false;
-        }
-      });
-      if (f) arr.push(socket);
-    } else {
-      this.forwardInstanceMap.set(targetInstanceUuid, [socket]);
-    }
+    if (!this.forwardInstanceMap.has(targetInstanceUuid)) this.forwardInstanceMap.set(targetInstanceUuid, new Map<string, Socket>());
+    this.forwardInstanceMap.get(targetInstanceUuid).set(socket.id, socket)
   }
 
-  stopForward(targetInstanceUuid: string, sSocket: Socket) {
-    if (this.forwardInstanceMap.has(targetInstanceUuid)) {
-      const arr = this.forwardInstanceMap.get(targetInstanceUuid);
-      arr.forEach((socket, index) => {
-        if (socket.id == sSocket.id) arr.splice(index, 1);
-      });
-    }
+  stopForward(targetInstanceUuid: string, socket: Socket) {
+    if (!this.forwardInstanceMap.has(targetInstanceUuid)) this.forwardInstanceMap.set(targetInstanceUuid, new Map<string, Socket>());
+    this.forwardInstanceMap.get(targetInstanceUuid).delete(socket.id);
   }
 
-  forEachForward(instanceUuid: string, callback: (socket: Socket, index: number) => void) {
+  forEachForward(instanceUuid: string, callback: (socket: Socket) => void) {
     if (this.forwardInstanceMap.has(instanceUuid)) {
-      this.forwardInstanceMap.get(instanceUuid).forEach((socket, index) => {
-        callback(socket, index);
+      this.forwardInstanceMap.get(instanceUuid).forEach((socket) => {
+        callback(socket);
       });
     }
   }
