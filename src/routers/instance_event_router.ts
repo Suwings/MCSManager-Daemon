@@ -1,7 +1,7 @@
 /*
  * @Author: Copyright(c) 2020 Suwings
  * @Date: 2020-11-23 17:45:02
- * @LastEditTime: 2021-05-19 22:45:38
+ * @LastEditTime: 2021-05-21 16:10:51
  * @Description: 应用实例所有主动性事件
  * @Projcet: MCSManager Daemon
  * @License: MIT
@@ -23,7 +23,6 @@ InstanceSubsystem.on("data", (instanceUuid: string, text: string) => {
 
 // 实例退出事件
 InstanceSubsystem.on("exit", (instanceUuid: string) => {
-  InstanceSubsystem.forwardInstanceMap.delete(instanceUuid);
   protocol.broadcast("instance/stopped", {
     instanceUuid: instanceUuid
   });
