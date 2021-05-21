@@ -70,7 +70,7 @@ class InstanceSubsystem extends EventEmitter {
 
   forward(targetInstanceUuid: string, socket: Socket) {
     if (!this.forwardInstanceMap.has(targetInstanceUuid)) this.forwardInstanceMap.set(targetInstanceUuid, new Map<string, Socket>());
-    this.forwardInstanceMap.get(targetInstanceUuid).set(socket.id, socket)
+    this.forwardInstanceMap.get(targetInstanceUuid).set(socket.id, socket);
   }
 
   stopForward(targetInstanceUuid: string, socket: Socket) {

@@ -24,7 +24,7 @@ export default class SendCommand extends InstanceCommand {
     // if (!instance.process || instance.status() != Instance.STATUS_RUNNING) {
     //   throw new Error("This instance status is NOT STATUS_RUN.");
     // }
-    if (!instance.process) throw new Error("Command execution error, process of instance object does not exist")
+    if (!instance.process) throw new Error("Command execution error, process of instance object does not exist");
 
     instance.process.stdin.write(encode(this.cmd, instance.config.oe));
     instance.process.stdin.write("\n");

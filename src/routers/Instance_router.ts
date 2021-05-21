@@ -174,7 +174,7 @@ routerApp.on("instance/stdin", (ctx, data) => {
   try {
     if (data.ch == "\r") return instance.process.stdin.write("\n");
     instance.process.stdin.write(data.ch);
-  } catch (err) { }
+  } catch (err) {}
 });
 
 // 杀死应用实例方法
