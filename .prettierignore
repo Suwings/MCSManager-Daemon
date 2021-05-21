@@ -13,6 +13,8 @@ public/login3/static/
 README.md
 README-traditional.md
 
+*.json
+
 # self files
 server/
 users/
